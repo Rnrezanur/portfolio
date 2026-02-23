@@ -133,44 +133,88 @@
         </div>
     </section>
 
+    
     <!-- Projects -->
 <section id="projects" class="py-24 bg-black/30 backdrop-blur-md">
   <div class="max-w-6xl mx-auto px-6">
 
-    <h2 class="text-3xl font-bold text-cyan-400 text-center mb-12">
+    <h2 class="text-3xl font-bold text-cyan-400 text-center mb-16">
       Projects
     </h2>
 
-    <p class="text-center text-slate-300 mb-16">
-      Here you can find all the projects I have built.
-    </p>
+<!--  FEATURED PROJECTS -->
+<div id="featured-section" class="mb-24">
 
-    <!-- Project Grid -->
-    <div id="project-container"
-         class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 
-                gap-14 transition-opacity duration-500 opacity-100">
-    </div>
+  <div class="flex justify-between items-center mb-10">
+    <h3 class="text-2xl font-semibold text-white">
+      Featured Projects
+    </h3>
 
-    <!-- Pagination -->
-    <div class="flex justify-center items-center gap-10 mt-16">
+    <button id="seeMoreBtn"
+      class="hidden px-5 py-2 rounded-full 
+             bg-gradient-to-r from-cyan-400 to-teal-400 
+             text-black font-medium 
+             hover:scale-105 transition-all duration-300
+             shadow-lg shadow-cyan-400/30">
+      Explore Featured
+    </button>
+  </div>
 
-      <button id="prevBtn"
-        class="px-6 py-2 rounded-xl bg-slate-900 hover:bg-cyan-400 hover:text-black transition">
-        Previous
-      </button>
+  <div id="featured-container"
+       class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 
+              gap-14 transition-opacity duration-300">
+  </div>
 
-      <span id="pageNumber" class="text-slate-300 text-lg"></span>
+  <!-- Featured Pagination -->
+  <div id="featuredPagination"
+       class="flex justify-center items-center gap-6 mt-12 hidden">
 
-      <button id="nextBtn"
-        class="px-6 py-2 rounded-xl bg-slate-900 hover:bg-cyan-400 hover:text-black transition">
-        Next
-      </button>
+    <button id="featuredPrev"
+      class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-cyan-400 hover:text-black transition">
+      Prev
+    </button>
+
+    <span id="featuredPageNumber"
+          class="text-slate-300"></span>
+
+    <button id="featuredNext"
+      class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-cyan-400 hover:text-black transition">
+      Next
+    </button>
+
+  </div>
+
+</div>
+
+    <!--  ALL PROJECTS -->
+    <div>
+      <h3 class="text-2xl font-semibold text-white mb-10">
+        All Projects
+      </h3>
+
+      <div id="project-container"
+           class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-14 transition-opacity duration-500 opacity-100">
+      </div>
+
+      <!-- Pagination -->
+      <div class="flex justify-center items-center gap-10 mt-16">
+        <button id="prevBtn"
+          class="px-6 py-2 rounded-xl bg-slate-900 hover:bg-cyan-400 hover:text-black transition">
+          Previous
+        </button>
+
+        <span id="pageNumber" class="text-slate-300 text-lg"></span>
+
+        <button id="nextBtn"
+          class="px-6 py-2 rounded-xl bg-slate-900 hover:bg-cyan-400 hover:text-black transition">
+          Next
+        </button>
+      </div>
 
     </div>
 
   </div>
 </section>
-
 
     <!-- Contact -->
     <section id="contact" class="py-24 bg-[#1e3a4c]">

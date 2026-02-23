@@ -11,49 +11,138 @@ const observer = new IntersectionObserver((entries) => {
 elements.forEach(el => observer.observe(el));
 
 
-
 const projects = [
   {
     title: "updating",
     description: ".............",
-    link: "link_here"
+    link: "link_here",
+    pinned: false
   },
   {
     title: "updating",
     description: ".............",
-    link: "link_here"
+    link: "link_here",
+    pinned: false
   },
   {
     title: "updating",
     description: ".............",
-    link: "link_here"
-  },
-  {
-    title: "updating",
-    description: "..........",
-    link: "link_here"
-  },
-  {
-    title: "updating",
-    description: "..........",
-    link: "link_here"
+    link: "link_here",
+    pinned: false
   }
+
 
 ];
 
+// for next page in feature pin option 
+
+const seeMoreBtn = document.getElementById("seeMoreBtn");
+const featuredPagination = document.getElementById("featuredPagination");
+const featuredPrev = document.getElementById("featuredPrev");
+const featuredNext = document.getElementById("featuredNext");
+const featuredPageNumber = document.getElementById("featuredPageNumber");
+
+let showAllFeatured = false;
+let featuredPage = 1;
+const FEATURE_LIMIT = 3;
+const FEATURE_PER_PAGE = 6;
 
 const projectsPerPage = 6;
-
 let currentPage = 1;
 
 const container = document.getElementById("project-container");
+const featuredContainer = document.getElementById("featured-container");
 const pageNumber = document.getElementById("pageNumber");
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 
+
+
+
+
+// DISPLAY FEATURED PROJECTS
+
+
+function displayFeatured() {
+
+  featuredContainer.innerHTML = "";
+
+  const featuredProjects = projects.filter(p => p.pinned);
+
+  if (featuredProjects.length === 0) {
+    document.getElementById("featured-section").style.display = "none";
+    return;
+  }
+
+  // If less than limit → no button
+  if (featuredProjects.length > FEATURE_LIMIT) {
+    seeMoreBtn.classList.remove("hidden");
+  } else {
+    seeMoreBtn.classList.add("hidden");
+  }
+
+  if (!showAllFeatured) {
+
+    // Default mode → show only 3
+    const initial = featuredProjects.slice(0, FEATURE_LIMIT);
+    initial.forEach(project => {
+      featuredContainer.innerHTML += createCard(project);
+    });
+
+    featuredPagination.classList.add("hidden");
+
+  } else {
+
+    // Paginated mode
+    const start = (featuredPage - 1) * FEATURE_PER_PAGE;
+    const end = start + FEATURE_PER_PAGE;
+
+    const current = featuredProjects.slice(start, end);
+
+    current.forEach(project => {
+      featuredContainer.innerHTML += createCard(project);
+    });
+
+    const totalPages = Math.ceil(featuredProjects.length / FEATURE_PER_PAGE);
+
+    featuredPageNumber.textContent =
+      `Page ${featuredPage} of ${totalPages}`;
+
+    featuredPrev.disabled = featuredPage === 1;
+    featuredNext.disabled = featuredPage === totalPages;
+
+    featuredPagination.classList.remove("hidden");
+  }
+
+  seeMoreBtn.textContent = showAllFeatured
+    ? "Collapse Featured"
+    : "Explore Featured";
+}
+
+// Featured Pagination Events
+
+featuredPrev.addEventListener("click", () => {
+  if (featuredPage > 1) {
+    featuredPage--;
+    displayFeatured();
+  }
+});
+
+featuredNext.addEventListener("click", () => {
+  const featuredProjects = projects.filter(p => p.pinned);
+  const totalPages = Math.ceil(featuredProjects.length / FEATURE_PER_PAGE);
+
+  if (featuredPage < totalPages) {
+    featuredPage++;
+    displayFeatured();
+  }
+});
+
+
+// DISPLAY ALL PROJECTS (EXCLUDING PINNED)
+
 function displayProjects() {
 
-  // Fade out
   container.classList.remove("opacity-100");
   container.classList.add("opacity-0");
 
@@ -61,14 +150,36 @@ function displayProjects() {
 
     container.innerHTML = "";
 
+    const nonPinned = projects.filter(p => !p.pinned);
+
     const start = (currentPage - 1) * projectsPerPage;
     const end = start + projectsPerPage;
 
-    const currentProjects = projects.slice(start, end);
+    const currentProjects = nonPinned.slice(start, end);
 
-currentProjects.forEach(project => {
+    currentProjects.forEach(project => {
+      container.innerHTML += createCard(project);
+    });
 
-  container.innerHTML += `
+    const totalPages = Math.ceil(nonPinned.length / projectsPerPage);
+
+    pageNumber.textContent = `Page ${currentPage} of ${totalPages}`;
+
+    prevBtn.disabled = currentPage === 1;
+    nextBtn.disabled = currentPage === totalPages;
+
+    container.classList.remove("opacity-0");
+    container.classList.add("opacity-100");
+
+  }, 300);
+}
+
+
+
+// CARD TEMPLATE
+
+function createCard(project) {
+  return `
     <div class="bg-slate-900 p-8 rounded-2xl
                 hover:-translate-y-3
                 hover:shadow-2xl
@@ -91,23 +202,13 @@ currentProjects.forEach(project => {
                 hover:bg-white transition self-start">
         View Project
       </a>
-
     </div>
   `;
-});
-    const totalPages = Math.ceil(projects.length / projectsPerPage);
-
-    pageNumber.textContent = `Page ${currentPage} of ${totalPages}`;
-
-    prevBtn.disabled = currentPage === 1;
-    nextBtn.disabled = currentPage === totalPages;
-
-    // Fade in
-    container.classList.remove("opacity-0");
-    container.classList.add("opacity-100");
-
-  }, 300);
 }
+
+
+
+// Pagination Events
 
 prevBtn.addEventListener("click", () => {
   if (currentPage > 1) {
@@ -117,11 +218,27 @@ prevBtn.addEventListener("click", () => {
 });
 
 nextBtn.addEventListener("click", () => {
-  const totalPages = Math.ceil(projects.length / projectsPerPage);
+  const nonPinned = projects.filter(p => !p.pinned);
+  const totalPages = Math.ceil(nonPinned.length / projectsPerPage);
+
   if (currentPage < totalPages) {
     currentPage++;
     displayProjects();
   }
 });
 
+
+
+// See More Toggle
+
+seeMoreBtn.addEventListener("click", () => {
+  showAllFeatured = !showAllFeatured;
+  featuredPage = 1;
+  displayFeatured();
+});
+
+
+
+// Initialize
+displayFeatured();
 displayProjects();
