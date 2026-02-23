@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rezanur | Front-End Developer</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome (WORKING CDN VERSION) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <!-- css link -->
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Js -->
+
+    <script src="script.js" defer></script>
+
+</head>
+
+<body class="text-white overflow-x-hidden">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full backdrop-blur-md bg-black/30 z-50">
+        <div class="max-w-6xl mx-auto flex justify-between items-center py-5 px-6">
+            <h1 class="text-2xl font-bold text-cyan-400 tracking-wide">
+                Md Rezanur Bin Shamim
+            </h1>
+            <ul class="hidden md:flex gap-8 text-slate-300">
+                <li><a href="#about" class="hover:text-cyan-400 transition">About</a></li>
+                <li><a href="#skills" class="hover:text-cyan-400 transition">Skills</a></li>
+                <li><a href="#projects" class="hover:text-cyan-400 transition">Projects</a></li>
+                <li><a href="#contact" class="hover:text-cyan-400 transition">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center pt-28">
+        <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+
+            <div class="fade-up">
+                <h2 class="text-4xl md:text-6xl font-extrabold leading-tight">
+                    Hi, I'm 
+                    <span class="text-cyan-400">Rezanur</span><br>
+                    <span class="text-white text-3xl md:text-4xl font-semibold">
+                        Md Rezanur Bin Shamim
+                    </span>
+                </h2>
+
+                <p class="mt-6 text-lg text-slate-300">
+                    Front-End Developer specializing in responsive UI development.
+                    Currently expanding into full-stack development using React and backend technologies.
+                </p>
+
+                <div class="mt-8 flex gap-4">
+                    <a href="#projects"
+                        class="px-6 py-3 bg-cyan-400 text-black font-semibold rounded-xl shadow-lg hover:scale-105 hover:shadow-cyan-400/40 transition duration-300">
+                        View Projects
+                    </a>
+
+                    <a href="#contact"
+                        class="px-6 py-3 border border-cyan-400 rounded-xl hover:bg-cyan-400 hover:text-black transition duration-300">
+                        Contact Me
+                    </a>
+                </div>
+            </div>
+
+            <div class="flex justify-center fade-up">
+                <img src="image/320389750_1866259287084934_5244773994623558519_n.jpg"
+                    class="w-80 h-80 object-cover rounded-full border-4 border-cyan-400 shadow-2xl" alt="Rezanur">
+            </div>
+
+        </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="py-24 bg-black/30 backdrop-blur-md">
+        <div class="max-w-4xl mx-auto text-center px-6 fade-up">
+            <h2 class="text-3xl font-bold text-cyan-400 mb-6">
+                About Me
+            </h2>
+            <p class="text-slate-300 leading-relaxed">
+                Computer Science student passionate about crafting elegant and high-performance web interfaces.
+                Strong foundation in frontend development and currently building hands-on projects to transition into
+                full-stack (MERN) development.
+            </p>
+        </div>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills" class="py-24">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-3xl font-bold text-cyan-400 text-center mb-12 fade-up">
+                Technical Skills
+            </h2>
+
+            <div class="grid md:grid-cols-2 gap-10 fade-up">
+
+                <!-- Core Skills -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-white">
+                        Core Skills
+                    </h3>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="px-4 py-2 bg-slate-800 rounded-full">HTML5</span>
+                        <span class="px-4 py-2 bg-slate-800 rounded-full">CSS3</span>
+                        <span class="px-4 py-2 bg-slate-800 rounded-full">Tailwind CSS</span>
+                        <span class="px-4 py-2 bg-slate-800 rounded-full">JavaScript</span>
+                        <span class="px-4 py-2 bg-slate-800 rounded-full">Responsive Design</span>
+                        <span class="px-4 py-2 bg-slate-800 rounded-full">Git & GitHub</span>
+                    </div>
+                </div>
+
+                <!-- Expanding Into -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-white">
+                        Expanding Into
+                    </h3>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="px-4 py-2 bg-slate-700 rounded-full">React.js</span>
+                        <span class="px-4 py-2 bg-slate-700 rounded-full">Node.js</span>
+                        <span class="px-4 py-2 bg-slate-700 rounded-full">Express.js</span>
+                        <span class="px-4 py-2 bg-slate-700 rounded-full">MongoDB</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects" class="py-24 bg-black/30 backdrop-blur-md">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-3xl font-bold text-cyan-400 text-center mb-12 fade-up">
+                Projects
+            </h2>
+
+            <div class="grid md:grid-cols-3 gap-8 fade-up">
+
+                <div
+                    class="bg-slate-900 p-6 rounded-2xl hover:scale-105 hover:shadow-xl hover:shadow-cyan-400/20 transition">
+                    <h3 class="font-semibold text-lg mb-3">Portfolio Website</h3>
+                    <p class="text-slate-400 text-sm">
+                        Modern animated portfolio built with Tailwind CSS.
+                    </p>
+                </div>
+
+                <div
+                    class="bg-slate-900 p-6 rounded-2xl hover:scale-105 hover:shadow-xl hover:shadow-cyan-400/20 transition">
+                    <h3 class="font-semibold text-lg mb-3">E-commerce UI</h3>
+                    <p class="text-slate-400 text-sm">
+                        Responsive landing page with clean and interactive design.
+                    </p>
+                </div>
+
+                <div
+                    class="bg-slate-900 p-6 rounded-2xl hover:scale-105 hover:shadow-xl hover:shadow-cyan-400/20 transition">
+                    <h3 class="font-semibold text-lg mb-3">Dashboard Layout</h3>
+                    <p class="text-slate-400 text-sm">
+                        Modern admin dashboard interface design.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="py-24 bg-[#1e3a4c]">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+
+            <h2 class="text-3xl font-bold text-cyan-400 mb-12">
+                Contact Me
+            </h2>
+
+            <div class="w-fit mx-auto space-y-8 text-left">
+
+                <a href="mailto:rezanurbinshamim@gmail.com"
+                    class="flex items-center gap-5 hover:text-cyan-400 transition">
+                    <i class="fa-solid fa-envelope text-2xl w-8 text-center"></i>
+                    <span class="text-lg">rezanurbinshamim@gmail.com</span>
+                </a>
+
+                <a href="tel:01869529572" class="flex items-center gap-5 hover:text-cyan-400 transition">
+                    <i class="fa-solid fa-phone text-2xl w-8 text-center"></i>
+                    <span class="text-lg">01869529572</span>
+                </a>
+
+                <a href="https://facebook.com/rnrezanur" target="_blank"
+                    class="flex items-center gap-5 hover:text-cyan-400 transition">
+                    <i class="fa-brands fa-facebook text-2xl w-8 text-center"></i>
+                    <span class="text-lg">Facebook Profile</span>
+                </a>
+
+                <a href="https://github.com/Rnrezanur" target="_blank"
+                    class="flex items-center gap-5 hover:text-cyan-400 transition">
+                    <i class="fa-brands fa-github text-2xl w-8 text-center"></i>
+                    <span class="text-lg">GitHub Profile</span>
+                </a>
+
+                <!-- <a href="https://linkedin.com/in/yourprofile" target="_blank"
+                    class="flex items-center gap-5 hover:text-cyan-400 transition">
+                    <i class="fa-brands fa-linkedin text-2xl w-8 text-center"></i>
+                    <span class="text-lg">LinkedIn Profile</span>
+                </a> -->
+
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="text-center py-6 bg-black/40 text-slate-400 text-sm">
+        © 2026 Rezanur Bin Shamim | Front-End Developer
+    </footer>
+
+
+</body>
+
+</html>
