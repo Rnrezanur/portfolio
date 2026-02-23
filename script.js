@@ -11,9 +11,6 @@ const observer = new IntersectionObserver((entries) => {
 elements.forEach(el => observer.observe(el));
 
 
-// ==========================
-// PREMIUM 3-CARD PAGINATION
-// ==========================
 
 const projects = [
   {
@@ -44,7 +41,7 @@ const projects = [
 
 ];
 
-// 🔥 6 projects per page (2 rows × 3 columns)
+
 const projectsPerPage = 6;
 
 let currentPage = 1;
