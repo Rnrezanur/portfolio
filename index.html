@@ -134,41 +134,43 @@
     </section>
 
     <!-- Projects -->
-    <section id="projects" class="py-24 bg-black/30 backdrop-blur-md">
-        <div class="max-w-6xl mx-auto px-6">
-            <h2 class="text-3xl font-bold text-cyan-400 text-center mb-12 fade-up">
-                Projects
-            </h2>
+<section id="projects" class="py-24 bg-black/30 backdrop-blur-md">
+  <div class="max-w-6xl mx-auto px-6">
 
-            <div class="grid md:grid-cols-3 gap-8 fade-up">
+    <h2 class="text-3xl font-bold text-cyan-400 text-center mb-12">
+      Projects
+    </h2>
 
-                <div
-                    class="bg-slate-900 p-6 rounded-2xl hover:scale-105 hover:shadow-xl hover:shadow-cyan-400/20 transition">
-                    <h3 class="font-semibold text-lg mb-3">Portfolio Website</h3>
-                    <p class="text-slate-400 text-sm">
-                        Modern animated portfolio built with Tailwind CSS.
-                    </p>
-                </div>
+    <p class="text-center text-slate-300 mb-16">
+      Here you can find all the projects I have built.
+    </p>
 
-                <div
-                    class="bg-slate-900 p-6 rounded-2xl hover:scale-105 hover:shadow-xl hover:shadow-cyan-400/20 transition">
-                    <h3 class="font-semibold text-lg mb-3">E-commerce UI</h3>
-                    <p class="text-slate-400 text-sm">
-                        Responsive landing page with clean and interactive design.
-                    </p>
-                </div>
+    <!-- Project Grid -->
+    <div id="project-container"
+         class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 
+                gap-14 transition-opacity duration-500 opacity-100">
+    </div>
 
-                <div
-                    class="bg-slate-900 p-6 rounded-2xl hover:scale-105 hover:shadow-xl hover:shadow-cyan-400/20 transition">
-                    <h3 class="font-semibold text-lg mb-3">Dashboard Layout</h3>
-                    <p class="text-slate-400 text-sm">
-                        Modern admin dashboard interface design.
-                    </p>
-                </div>
+    <!-- Pagination -->
+    <div class="flex justify-center items-center gap-10 mt-16">
 
-            </div>
-        </div>
-    </section>
+      <button id="prevBtn"
+        class="px-6 py-2 rounded-xl bg-slate-900 hover:bg-cyan-400 hover:text-black transition">
+        Previous
+      </button>
+
+      <span id="pageNumber" class="text-slate-300 text-lg"></span>
+
+      <button id="nextBtn"
+        class="px-6 py-2 rounded-xl bg-slate-900 hover:bg-cyan-400 hover:text-black transition">
+        Next
+      </button>
+
+    </div>
+
+  </div>
+</section>
+
 
     <!-- Contact -->
     <section id="contact" class="py-24 bg-[#1e3a4c]">
