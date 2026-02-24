@@ -13,21 +13,24 @@ elements.forEach(el => observer.observe(el));
 
 const projects = [
   {
-    title: "updating",
-    description: ".............",
-    link: "link_here",
+    title: "Simple Fashion UI",
+    description:"A responsive fashion landing page built with HTML and Tailwind CSS.",
+    demo: "https://simple-fashion.vercel.app",   // Live link
+    link: "https://github.com/Rnrezanur/simple-fashion",
     pinned: false
   },
   {
-    title: "updating",
-    description: ".............",
-    link: "link_here",
+    title: "Influencer Gear",
+    description: "Responsive e-commerce product showcase built with HTML & CSS.",
+    demo: "https://influencer-gear-hazel.vercel.app/",
+    link:"",
     pinned: false
   },
   {
-    title: "updating",
-    description: ".............",
-    link: "link_here",
+    title: "Rock-Paper-Scissors",
+    description: "Interactive GUI game built with Python.",
+    demo: null,
+    link: "https://github.com/Rnrezanur/rock-paper-scissors",
     pinned: false
   }
 
@@ -196,12 +199,26 @@ function createCard(project) {
         ${project.description}
       </p>
 
-      <a href="${project.link}" target="_blank"
-         class="inline-block px-5 py-2 bg-cyan-400 text-black 
-                rounded-lg font-medium 
-                hover:bg-white transition self-start">
-        View Project
-      </a>
+      <div class="flex gap-4 mt-auto">
+
+        ${project.demo ? `
+          <a href="${project.demo}" target="_blank"
+             class="px-4 py-2 bg-cyan-400 text-black 
+                    rounded-lg font-medium 
+                    hover:bg-white transition">
+            Live Demo
+          </a>
+        ` : ''}
+
+        <a href="${project.link}" target="_blank"
+           class="px-4 py-2 border border-cyan-400 text-cyan-400 
+                  rounded-lg font-medium 
+                  hover:bg-cyan-400 hover:text-black transition">
+          GitHub
+        </a>
+
+      </div>
+
     </div>
   `;
 }

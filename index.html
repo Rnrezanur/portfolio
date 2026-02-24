@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rezanur | Front-End Developer</title>
+    <title>Rezanur | Developer</title>
+    <link rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E💻%3C/text%3E%3C/svg%3E">
 
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -45,7 +47,7 @@
 
             <div class="fade-up">
                 <h2 class="text-4xl md:text-6xl font-extrabold leading-tight">
-                    Hi, I'm 
+                    Hi, I'm
                     <span class="text-cyan-400">Rezanur</span><br>
                     <span class="text-white text-3xl md:text-4xl font-semibold">
                         Md Rezanur Bin Shamim
@@ -62,6 +64,7 @@
                         class="px-6 py-3 bg-cyan-400 text-black font-semibold rounded-xl shadow-lg hover:scale-105 hover:shadow-cyan-400/40 transition duration-300">
                         View Projects
                     </a>
+
 
                     <a href="#contact"
                         class="px-6 py-3 border border-cyan-400 rounded-xl hover:bg-cyan-400 hover:text-black transition duration-300">
@@ -133,88 +136,84 @@
         </div>
     </section>
 
-    
+
     <!-- Projects -->
-<section id="projects" class="py-24 bg-black/30 backdrop-blur-md">
-  <div class="max-w-6xl mx-auto px-6">
+    <section id="projects" class="py-24 bg-black/30 backdrop-blur-md">
+        <div class="max-w-6xl mx-auto px-6">
 
-    <h2 class="text-3xl font-bold text-cyan-400 text-center mb-16">
-      Projects
-    </h2>
+            <h2 class="text-3xl font-bold text-cyan-400 text-center mb-16">
+                Projects
+            </h2>
 
-<!--  FEATURED PROJECTS -->
-<div id="featured-section" class="mb-24">
+            <!--  FEATURED PROJECTS -->
+            <div id="featured-section" class="mb-24">
 
-  <div class="flex justify-between items-center mb-10">
-    <h3 class="text-2xl font-semibold text-white">
-      Featured Projects
-    </h3>
+                <div class="flex justify-between items-center mb-10">
+                    <h3 class="text-2xl font-semibold text-white">
+                        Featured Projects
+                    </h3>
 
-    <button id="seeMoreBtn"
-      class="hidden px-5 py-2 rounded-full 
+                    <button id="seeMoreBtn" class="hidden px-5 py-2 rounded-full 
              bg-gradient-to-r from-cyan-400 to-teal-400 
              text-black font-medium 
              hover:scale-105 transition-all duration-300
              shadow-lg shadow-cyan-400/30">
-      Explore Featured
-    </button>
-  </div>
+                        Explore Featured
+                    </button>
+                </div>
 
-  <div id="featured-container"
-       class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 
+                <div id="featured-container" class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 
               gap-14 transition-opacity duration-300">
-  </div>
+                </div>
 
-  <!-- Featured Pagination -->
-  <div id="featuredPagination"
-       class="flex justify-center items-center gap-6 mt-12 hidden">
+                <!-- Featured Pagination -->
+                <div id="featuredPagination" class="flex justify-center items-center gap-6 mt-12 hidden">
 
-    <button id="featuredPrev"
-      class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-cyan-400 hover:text-black transition">
-      Prev
-    </button>
+                    <button id="featuredPrev"
+                        class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-cyan-400 hover:text-black transition">
+                        Prev
+                    </button>
 
-    <span id="featuredPageNumber"
-          class="text-slate-300"></span>
+                    <span id="featuredPageNumber" class="text-slate-300"></span>
 
-    <button id="featuredNext"
-      class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-cyan-400 hover:text-black transition">
-      Next
-    </button>
+                    <button id="featuredNext"
+                        class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-cyan-400 hover:text-black transition">
+                        Next
+                    </button>
 
-  </div>
+                </div>
 
-</div>
+            </div>
 
-    <!--  ALL PROJECTS -->
-    <div>
-      <h3 class="text-2xl font-semibold text-white mb-10">
-        All Projects
-      </h3>
+            <!--  ALL PROJECTS -->
+            <div>
+                <h3 class="text-2xl font-semibold text-white mb-10">
+                    All Projects
+                </h3>
 
-      <div id="project-container"
-           class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-14 transition-opacity duration-500 opacity-100">
-      </div>
+                <div id="project-container"
+                    class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-14 transition-opacity duration-500 opacity-100">
+                </div>
 
-      <!-- Pagination -->
-      <div class="flex justify-center items-center gap-10 mt-16">
-        <button id="prevBtn"
-          class="px-6 py-2 rounded-xl bg-slate-900 hover:bg-cyan-400 hover:text-black transition">
-          Previous
-        </button>
+                <!-- Pagination -->
+                <div class="flex justify-center items-center gap-10 mt-16">
+                    <button id="prevBtn"
+                        class="px-6 py-2 rounded-xl bg-slate-900 hover:bg-cyan-400 hover:text-black transition">
+                        Prev
+                    </button>
 
-        <span id="pageNumber" class="text-slate-300 text-lg"></span>
+                    <span id="pageNumber" class="text-slate-300 text-lg"></span>
 
-        <button id="nextBtn"
-          class="px-6 py-2 rounded-xl bg-slate-900 hover:bg-cyan-400 hover:text-black transition">
-          Next
-        </button>
-      </div>
+                    <button id="nextBtn"
+                        class="px-6 py-2 rounded-xl bg-slate-900 hover:bg-cyan-400 hover:text-black transition">
+                        Next
+                    </button>
+                </div>
 
-    </div>
+            </div>
 
-  </div>
-</section>
+        </div>
+    </section>
 
     <!-- Contact -->
     <section id="contact" class="py-24 bg-[#1e3a4c]">
@@ -261,7 +260,7 @@
     </section>
 
     <footer class="text-center py-6 bg-black/40 text-slate-400 text-sm">
-        © 2026 Rezanur Bin Shamim | Front-End Developer
+        © 2026 Rezanur Bin Shamim | Developer
     </footer>
 
 
