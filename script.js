@@ -12,6 +12,14 @@ elements.forEach(el => observer.observe(el));
 
 
 const projects = [
+    {
+    title: "IntelliEco – Smart Eco-System Management Platform",
+    description: "A web app for monitoring and managing eco-friendly systems with smart data tracking.",
+    demo: null,
+    link: "https://github.com/Rnrezanur/intellieco-eco-system",
+    pinned: false
+  },
+
   {
     title: "Simple Fashion UI",
     description:"A responsive fashion landing page built with HTML and Tailwind CSS.",
@@ -19,6 +27,7 @@ const projects = [
     link: "https://github.com/Rnrezanur/simple-fashion",
     pinned: false
   },
+
   {
     title: "Influencer Gear",
     description: "Responsive e-commerce product showcase built with HTML & CSS.",
@@ -27,14 +36,6 @@ const projects = [
     pinned: false
   },
   
-  {
-    title: "IntelliEco – Smart Eco-System Management Platform",
-    description: "A web app for monitoring and managing eco-friendly systems with smart data tracking.",
-    demo: null,
-    link: "https://github.com/Rnrezanur/intellieco-eco-system",
-    pinned: false
-  },
-
   {
     title: "Rock-Paper-Scissors",
     description: "Interactive GUI game built with Python.",
