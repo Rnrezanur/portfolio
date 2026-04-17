@@ -26,6 +26,15 @@ const projects = [
     link:"",
     pinned: false
   },
+  
+  {
+    title: "IntelliEco – Smart Eco-System Management Platform",
+    description: "A web app for monitoring and managing eco-friendly systems with smart data tracking.",
+    demo: null,
+    link: "https://github.com/Rnrezanur/intellieco-eco-system",
+    pinned: false
+  },
+
   {
     title: "Rock-Paper-Scissors",
     description: "Interactive GUI game built with Python.",
@@ -33,6 +42,7 @@ const projects = [
     link: "https://github.com/Rnrezanur/rock-paper-scissors",
     pinned: false
   }
+  
 
 
 ];
