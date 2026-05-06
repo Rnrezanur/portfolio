@@ -14,7 +14,154 @@ const observer = new IntersectionObserver((entries) => {
 elements.forEach((el) => observer.observe(el));
 window.addEventListener("load", () => {
   document.body.classList.add("page-ready");
+  initHeroTyping();
+  initConsoleTyping();
 });
+
+function initHeroTyping() {
+  const heading = document.querySelector(".hero-heading-typed");
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!heading || prefersReducedMotion) {
+    return;
+  }
+
+  const line1 = heading.querySelector('[data-typed-line="1"]');
+  const line2 = heading.querySelector('[data-typed-line="2"]');
+
+  if (!line1 || !line2) {
+    return;
+  }
+
+  const prefix = heading.dataset.prefix ?? "";
+  const name = heading.dataset.name ?? "";
+  const suffix = "";
+  const role = heading.dataset.role ?? "";
+  const fullLine1 = `${prefix}${name}${suffix}`;
+  const nameStart = prefix.length;
+  const nameEnd = nameStart + name.length;
+  const cursor = '<span class="typing-cursor" aria-hidden="true"></span>';
+
+  function renderLine1(count, activeCursor = false) {
+    const visible = fullLine1.slice(0, count);
+    const before = visible.slice(0, Math.min(count, nameStart));
+    const accentPart = count > nameStart ? visible.slice(nameStart, Math.min(count, nameEnd)) : "";
+    const after = count > nameEnd ? visible.slice(nameEnd) : "";
+
+    line1.innerHTML = `${before}${accentPart ? `<span class="hero-accent">${accentPart}</span>` : ""}${after}${activeCursor ? cursor : ""}`;
+  }
+
+  function renderLine2(count, activeCursor = false) {
+    line2.innerHTML = `${role.slice(0, count)}${activeCursor ? cursor : ""}`;
+  }
+
+  renderLine1(0, true);
+  renderLine2(role.length, false);
+
+  const line1Speed = 70;
+
+  function typeFirstLine(index = 0) {
+    if (index <= fullLine1.length) {
+      renderLine1(index, true);
+      setTimeout(() => typeFirstLine(index + 1), line1Speed);
+      return;
+    }
+
+    renderLine1(fullLine1.length, true);
+  }
+
+  setTimeout(() => typeFirstLine(0), 220);
+}
+
+function initConsoleTyping() {
+  const typingTargets = Array.from(document.querySelectorAll(".dev-console-typing"));
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!typingTargets.length) {
+    return;
+  }
+
+  if (prefersReducedMotion) {
+    typingTargets.forEach((target) => {
+      target.textContent = target.dataset.codeText ?? "";
+      target.classList.remove("is-typing");
+    });
+    return;
+  }
+
+  typingTargets.forEach((target) => {
+    target.textContent = "";
+    target.classList.remove("is-typing");
+  });
+
+  let hasTyped = false;
+  const consoleCard = document.querySelector(".dev-console-code");
+
+  if (!consoleCard) {
+    return;
+  }
+
+  function resetTargets() {
+    typingTargets.forEach((target) => {
+      target.textContent = "";
+      target.classList.remove("is-typing");
+    });
+  }
+
+  function runConsoleLoop() {
+    function typeTargetAt(targetIndex = 0) {
+      const target = typingTargets[targetIndex];
+
+      if (!target) {
+        typingTargets.forEach((item) => item.classList.remove("is-typing"));
+        setTimeout(() => {
+          resetTargets();
+          runConsoleLoop();
+        }, 1400);
+        return;
+      }
+
+      const fullText = target.dataset.codeText ?? "";
+      let charIndex = 0;
+      typingTargets.forEach((item) => item.classList.remove("is-typing"));
+      target.classList.add("is-typing");
+
+      function typeNextChar() {
+        target.textContent = fullText.slice(0, charIndex);
+        charIndex += 1;
+
+        if (charIndex <= fullText.length) {
+          setTimeout(typeNextChar, targetIndex === 0 ? 34 : 30);
+          return;
+        }
+
+        target.classList.remove("is-typing");
+        setTimeout(() => typeTargetAt(targetIndex + 1), 90);
+      }
+
+      typeNextChar();
+    }
+
+    typeTargetAt(0);
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting || hasTyped) {
+        return;
+      }
+
+      hasTyped = true;
+      resetTargets();
+      runConsoleLoop();
+      observer.disconnect();
+    });
+  }, {
+    threshold: 0.25,
+  });
+
+  observer.observe(consoleCard);
+}
 
 function prepareScrollSequences(scope = document) {
   const groups = [
