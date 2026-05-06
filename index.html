@@ -5,264 +5,374 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rezanur | Developer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@500;700;800&display=swap"
+        rel="stylesheet">
     <link rel="icon"
-        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E💻%3C/text%3E%3C/svg%3E">
-
-    <!-- Tailwind -->
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E%F0%9F%92%BB%3C/text%3E%3C/svg%3E">
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Font Awesome (WORKING CDN VERSION) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-
-    <!-- css link -->
-
     <link rel="stylesheet" href="style.css">
-
-    <!-- Js -->
-
     <script src="script.js" defer></script>
-
 </head>
 
-<body class="text-white overflow-x-hidden">
+<body class="portfolio-body text-white overflow-x-hidden">
 
-    <!-- Navbar -->
-    <nav class="fixed w-full backdrop-blur-md bg-black/30 z-50">
-        <div class="max-w-6xl mx-auto flex justify-between items-center py-5 px-6">
-            <h1 class="text-2xl font-bold text-cyan-400 tracking-wide">
-                Md Rezanur Bin Shamim
-            </h1>
-            <ul class="hidden md:flex gap-8 text-slate-300">
-                <li><a href="#about" class="hover:text-cyan-400 transition">About</a></li>
-                <li><a href="#skills" class="hover:text-cyan-400 transition">Skills</a></li>
-                <li><a href="#projects" class="hover:text-cyan-400 transition">Projects</a></li>
-                <li><a href="#contact" class="hover:text-cyan-400 transition">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
+    <div class="page-shell">
 
-    <!-- Hero Section -->
-    <section class="min-h-screen flex items-center pt-28">
-        <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+        <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="sideMenu">
+            <span></span>
+            <span></span>
+        </button>
 
-            <div class="fade-up">
-                <h2 class="text-4xl md:text-6xl font-extrabold leading-tight">
-                    Hi, I'm
-                    <span class="text-cyan-400">Rezanur</span><br>
-                    <span class="text-white text-3xl md:text-4xl font-semibold">
-                        Md Rezanur Bin Shamim
-                    </span>
-                </h2>
+        <div class="menu-overlay" id="menuOverlay"></div>
 
-                <p class="mt-6 text-lg text-slate-300">
-                    Front-End Developer specializing in responsive UI development.
-                    Currently expanding into full-stack development using React and backend technologies.
+        <aside class="side-menu" id="sideMenu" aria-hidden="true">
+            <div class="side-menu-head">
+                <h3>Menu</h3>
+                <button class="menu-close" id="menuClose" aria-label="Close menu">&times;</button>
+            </div>
+
+            <nav class="side-menu-nav">
+                <a href="#home" class="side-menu-link"><i class="fa-solid fa-house"></i><span>Home</span></a>
+                <a href="#about" class="side-menu-link"><i class="fa-solid fa-user"></i><span>About</span></a>
+                <a href="#experience" class="side-menu-link"><i class="fa-solid fa-briefcase"></i><span>Experience</span></a>
+                <a href="#education" class="side-menu-link"><i class="fa-solid fa-graduation-cap"></i><span>Education</span></a>
+                <a href="#skills" class="side-menu-link"><i class="fa-solid fa-shapes"></i><span>Skills</span></a>
+                <a href="#projects" class="side-menu-link"><i class="fa-solid fa-table-cells-large"></i><span>Projects</span></a>
+                <a href="#contact" class="side-menu-link"><i class="fa-solid fa-envelope"></i><span>Contact</span></a>
+            </nav>
+
+            <div class="side-menu-social">
+                <p>Social</p>
+                <div>
+                    <a href="https://github.com/Rnrezanur" target="_blank" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                    <a href="https://facebook.com/rnrezanur" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="mailto:rezanurbinshamim@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+                </div>
+            </div>
+        </aside>
+
+        <aside class="profile-card fade-up">
+            <div class="profile-head">
+                <h1 class="profile-brand">Rezanur</h1>
+                <div class="profile-role">
+                    <p>Full Stack</p>
+                    <p>Developer</p>
+                </div>
+                <span class="status-dot"></span>
+            </div>
+
+            <div class="profile-image-wrap">
+                <img src="image/320389750_1866259287084934_5244773994623558519_n.jpg" alt="Rezanur"
+                    class="profile-image">
+            </div>
+
+            <div class="profile-meta">
+                <p class="profile-location">Md Rezanur Bin Shamim</p>
+                <p class="profile-email">rezanurbinshamim@gmail.com</p>
+                <p class="profile-copy">&copy; 2026 Rezanur. All Rights Reserved</p>
+            </div>
+
+            <div class="social-row">
+                <a href="https://github.com/Rnrezanur" target="_blank" aria-label="GitHub">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+                <a href="https://facebook.com/rnrezanur" target="_blank" aria-label="Facebook">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+                <a href="mailto:rezanurbinshamim@gmail.com" aria-label="Email">
+                    <i class="fa-solid fa-envelope"></i>
+                </a>
+                <a href="tel:01869529572" aria-label="Phone">
+                    <i class="fa-solid fa-phone"></i>
+                </a>
+            </div>
+
+            <a href="#contact" class="sidebar-cta">
+                <i class="fa-regular fa-envelope"></i>
+                <span>Hire Me!</span>
+            </a>
+        </aside>
+
+        <main class="content-column">
+
+            <section id="home" class="content-section intro-section fade-up">
+                <div class="section-kicker"><i class="fa-solid fa-house"></i> Introduce</div>
+                <div class="hero-main">
+                    <div class="hero-copy">
+                        <h2 class="hero-heading">
+                            Say Hi from <span class="hero-accent">Rezanur</span>,<br>
+                            Full Stack Developer
+                        </h2>
+                        <div class="hero-heading-trace" aria-hidden="true">
+                            <span></span>
+                        </div>
+                        <p class="hero-text">
+                            I design and build beautifully simple things and I love what I do.
+                            Clean interfaces, practical backend logic, and thoughtful digital experiences.
+                        </p>
+                        <div class="hero-actions">
+                            <a href="assets/Md_Rezanur_Bin_Shamim_CV.pdf" class="ghost-btn hero-btn" download>
+                                <i class="fa-solid fa-download"></i>
+                                <span>Download CV</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="about" class="content-section fade-up">
+                <div class="section-kicker"><i class="fa-solid fa-user"></i> About</div>
+                <h2 class="section-title">Every strong interface starts with clear thinking and thoughtful execution.</h2>
+                <p class="section-text">
+                    I am a Computer Science student who enjoys turning ideas into polished web interfaces. My work is
+                    centered around responsive layouts, modern styling, and user-friendly interactions that feel smooth
+                    and intentional.
+                </p>
+                <p class="section-text">
+                    I am currently focused on strengthening my full-stack MERN foundation through hands-on projects,
+                    continuous learning, and practical development work.
+                </p>
+            </section>
+
+            <section id="experience" class="content-section fade-up">
+                <div class="section-kicker"><i class="fa-solid fa-briefcase"></i> Experience</div>
+                <h2 class="education-title">EXPERIENCE</h2>
+                <div class="education-divider"></div>
+
+                <div class="timeline-resume">
+                    <div class="timeline-block">
+                        <div class="timeline-dot is-active"></div>
+                        <div class="timeline-content">
+                            <p class="timeline-period">2021 - Present</p>
+                            <div class="timeline-entry">
+                                <h3 class="timeline-role">Content Creator / Streamer</h3>
+                                <p class="timeline-meta">YouTube & Facebook</p>
+                                <ul class="timeline-points">
+                                    <li>Created gaming content for 35K+ audience on Facebook & YouTube</li>
+                                    <li>Managed live streams and audience engagement</li>
+                                    <li>Built consistency in content creation and personal branding</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-block">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <p class="timeline-period">June 2024 - Nov 2025</p>
+                            <div class="timeline-entry">
+                                <h3 class="timeline-role">Esports Secretary - GUCC Virtual Gaming Society</h3>
+                                <p class="timeline-meta">Green University of Bangladesh</p>
+                                <ul class="timeline-points">
+                                    <li>Organized and managed 5+ esports tournaments with 400+ participants</li>
+                                    <li>Coordinated with teams, sponsors, and volunteers</li>
+                                    <li>Developed event materials and basic web-based systems</li>
+                                    <li>Strengthened leadership and communication skills</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-block">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <p class="timeline-period">Feb 2026 - Present</p>
+                            <div class="timeline-entry">
+                                <h3 class="timeline-role">Junior Backend Engineer Intern</h3>
+                                <p class="timeline-meta">9 AM Solution</p>
+                                <ul class="timeline-points">
+                                    <li>Assisted in backend development tasks and API integration</li>
+                                    <li>Worked with databases and server-side logic</li>
+                                    <li>Collaborated with the development team on real-world projects</li>
+                                    <li>Learned practical workflow and software engineering practices</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="education" class="content-section fade-up">
+                <div class="section-kicker"><i class="fa-solid fa-graduation-cap"></i> Education</div>
+                <h2 class="education-title">EDUCATION</h2>
+                <div class="education-divider"></div>
+
+                <div class="timeline-resume">
+                    <div class="timeline-block">
+                        <div class="timeline-dot is-active"></div>
+                        <div class="timeline-content">
+                            <p class="timeline-period">Feb 2022 - Running</p>
+                            <div class="timeline-entry">
+                                <h3 class="timeline-role">Green University of Bangladesh</h3>
+                                <p class="timeline-meta">BSc in Computer Science and Engineering</p>
+                                <p class="timeline-note">Ongoing</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-block">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <p class="timeline-period">2018 - 2019</p>
+                            <div class="timeline-entry">
+                                <h3 class="timeline-role">Shahid Bulbul Government College</h3>
+                                <p class="timeline-meta">Science</p>
+                                <p class="timeline-note">GPA 5.00</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-block">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <p class="timeline-period">2016 - 2017</p>
+                            <div class="timeline-entry">
+                                <h3 class="timeline-role">Pabna Collectorate Public School and College</h3>
+                                <p class="timeline-meta">Science</p>
+                                <p class="timeline-note">GPA 5.00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="skills" class="content-section fade-up">
+                <div class="section-kicker"><i class="fa-solid fa-star"></i> Skills</div>
+                <h2 class="education-title">SKILLS</h2>
+                <div class="education-divider"></div>
+
+                <div class="skills-groups">
+                    <div class="skills-group">
+                        <h3 class="skills-group-title">Languages</h3>
+                        <div class="skills-badges">
+                            <span class="skill-badge"><i class="fa-solid fa-code"></i>C++</span>
+                            <span class="skill-badge"><i class="fa-solid fa-code"></i>C</span>
+                            <span class="skill-badge"><i class="fa-brands fa-java"></i>Java</span>
+                            <span class="skill-badge"><i class="fa-brands fa-python"></i>Python</span>
+                            <span class="skill-badge"><i class="fa-brands fa-js"></i>JavaScript</span>
+                            <span class="skill-badge"><i class="fa-solid fa-file-code"></i>TypeScript</span>
+                            <span class="skill-badge"><i class="fa-brands fa-php"></i>PHP</span>
+                        </div>
+                    </div>
+
+                    <div class="skills-group">
+                        <h3 class="skills-group-title">Frontend</h3>
+                        <div class="skills-badges">
+                            <span class="skill-badge"><i class="fa-brands fa-html5"></i>HTML5</span>
+                            <span class="skill-badge"><i class="fa-brands fa-css3-alt"></i>CSS3</span>
+                            <span class="skill-badge"><i class="fa-solid fa-wind"></i>Tailwind CSS</span>
+                            <span class="skill-badge"><i class="fa-brands fa-react"></i>React</span>
+                            <span class="skill-badge"><i class="fa-solid fa-n"></i>Next.js</span>
+                        </div>
+                    </div>
+
+                    <div class="skills-group">
+                        <h3 class="skills-group-title">Backend</h3>
+                        <div class="skills-badges">
+                            <span class="skill-badge"><i class="fa-brands fa-node-js"></i>Node.js</span>
+                            <span class="skill-badge"><i class="fa-solid fa-server"></i>Express.js</span>
+                            <span class="skill-badge"><i class="fa-solid fa-layer-group"></i>NestJS</span>
+                        </div>
+                    </div>
+
+                    <div class="skills-group">
+                        <h3 class="skills-group-title">Databases</h3>
+                        <div class="skills-badges">
+                            <span class="skill-badge"><i class="fa-solid fa-database"></i>PostgreSQL</span>
+                            <span class="skill-badge"><i class="fa-solid fa-leaf"></i>MongoDB</span>
+                            <span class="skill-badge"><i class="fa-solid fa-database"></i>MySQL</span>
+                        </div>
+                    </div>
+
+                    <div class="skills-group">
+                        <h3 class="skills-group-title">Tools & Others</h3>
+                        <div class="skills-badges">
+                            <span class="skill-badge"><i class="fa-brands fa-git-alt"></i>Git</span>
+                            <span class="skill-badge"><i class="fa-brands fa-github"></i>GitHub</span>
+                            <span class="skill-badge"><i class="fa-solid fa-code"></i>VS Code</span>
+                            <span class="skill-badge"><i class="fa-solid fa-paper-plane"></i>Postman</span>
+                            <span class="skill-badge"><i class="fa-solid fa-bolt"></i>Thunder Client</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="projects" class="content-section fade-up">
+                <div class="section-kicker"><i class="fa-solid fa-image"></i> Projects</div>
+                <h2 class="section-title">Featured projects and hands-on builds.</h2>
+
+                <div id="featured-section" class="portfolio-block">
+                    <div class="portfolio-head">
+                        <h3 class="portfolio-subtitle">Featured Work</h3>
+                        <button id="seeMoreBtn" class="ghost-btn hidden">Explore Featured</button>
+                    </div>
+
+                    <div id="featured-container" class="project-grid"></div>
+
+                    <div id="featuredPagination" class="pagination-row hidden">
+                        <button id="featuredPrev" class="ghost-btn small-btn">Prev</button>
+                        <span id="featuredPageNumber" class="page-indicator"></span>
+                        <button id="featuredNext" class="ghost-btn small-btn">Next</button>
+                    </div>
+                </div>
+
+                <div class="portfolio-block">
+                    <h3 class="portfolio-subtitle">All Projects</h3>
+                    <div id="project-container" class="project-grid"></div>
+
+                    <div class="pagination-row">
+                        <button id="prevBtn" class="ghost-btn small-btn">Prev</button>
+                        <span id="pageNumber" class="page-indicator"></span>
+                        <button id="nextBtn" class="ghost-btn small-btn">Next</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact" class="content-section fade-up">
+                <div class="section-kicker"><i class="fa-solid fa-envelope"></i> Contact</div>
+                <h2 class="section-title">Let’s build something clean, useful, and memorable together.</h2>
+                <p class="section-text">
+                    I am open to internships, freelance work, collaborations, and full-stack opportunities where I can
+                    contribute, learn, and keep improving my craft.
                 </p>
 
-                <div class="mt-8 flex gap-4">
-                    <a href="#projects"
-                        class="px-6 py-3 bg-cyan-400 text-black font-semibold rounded-xl shadow-lg hover:scale-105 hover:shadow-cyan-400/40 transition duration-300">
-                        View Projects
+                <div class="contact-list">
+                    <a href="mailto:rezanurbinshamim@gmail.com" class="contact-item">
+                        <i class="fa-solid fa-envelope"></i>
+                        <span>rezanurbinshamim@gmail.com</span>
                     </a>
-
-
-                    <a href="#contact"
-                        class="px-6 py-3 border border-cyan-400 rounded-xl hover:bg-cyan-400 hover:text-black transition duration-300">
-                        Contact Me
+                    <a href="tel:01869529572" class="contact-item">
+                        <i class="fa-solid fa-phone"></i>
+                        <span>01869529572</span>
+                    </a>
+                    <a href="https://facebook.com/rnrezanur" target="_blank" class="contact-item">
+                        <i class="fa-brands fa-facebook"></i>
+                        <span>Facebook Profile</span>
+                    </a>
+                    <a href="https://github.com/Rnrezanur" target="_blank" class="contact-item">
+                        <i class="fa-brands fa-github"></i>
+                        <span>GitHub Profile</span>
                     </a>
                 </div>
-            </div>
+            </section>
 
-            <div class="flex justify-center fade-up">
-                <img src="image/320389750_1866259287084934_5244773994623558519_n.jpg"
-                    class="w-80 h-80 object-cover rounded-full border-4 border-cyan-400 shadow-2xl" alt="Rezanur">
-            </div>
+        </main>
 
-        </div>
-    </section>
+        <nav class="dock-nav">
+            <a href="#home" class="nav-link" aria-label="Home"><i class="fa-solid fa-house"></i></a>
+            <a href="#about" class="nav-link" aria-label="About"><i class="fa-solid fa-user"></i></a>
+            <a href="#experience" class="nav-link" aria-label="Experience"><i class="fa-solid fa-briefcase"></i></a>
+            <a href="#education" class="nav-link" aria-label="Education"><i class="fa-solid fa-graduation-cap"></i></a>
+            <a href="#skills" class="nav-link" aria-label="Skills"><i class="fa-solid fa-shapes"></i></a>
+            <a href="#projects" class="nav-link" aria-label="Projects"><i class="fa-solid fa-table-cells-large"></i></a>
+            <a href="#contact" class="nav-link" aria-label="Contact"><i class="fa-solid fa-envelope"></i></a>
+        </nav>
 
-    <!-- About -->
-    <section id="about" class="py-24 bg-black/30 backdrop-blur-md">
-        <div class="max-w-4xl mx-auto text-center px-6 fade-up">
-            <h2 class="text-3xl font-bold text-cyan-400 mb-6">
-                About Me
-            </h2>
-            <p class="text-slate-300 leading-relaxed">
-                Computer Science student passionate about crafting elegant and high-performance web interfaces.
-                Strong foundation in frontend development and currently building hands-on projects to transition into
-                full-stack (MERN) development.
-            </p>
-        </div>
-    </section>
-
-    <!-- Skills -->
-    <section id="skills" class="py-24">
-        <div class="max-w-6xl mx-auto px-6">
-            <h2 class="text-3xl font-bold text-cyan-400 text-center mb-12 fade-up">
-                Technical Skills
-            </h2>
-
-            <div class="grid md:grid-cols-2 gap-10 fade-up">
-
-                <!-- Core Skills -->
-                <div>
-                    <h3 class="text-xl font-semibold mb-4 text-white">
-                        Core Skills
-                    </h3>
-                    <div class="flex flex-wrap gap-3">
-                        <span class="px-4 py-2 bg-slate-800 rounded-full">HTML5</span>
-                        <span class="px-4 py-2 bg-slate-800 rounded-full">CSS3</span>
-                        <span class="px-4 py-2 bg-slate-800 rounded-full">Tailwind CSS</span>
-                        <span class="px-4 py-2 bg-slate-800 rounded-full">JavaScript</span>
-                        <span class="px-4 py-2 bg-slate-800 rounded-full">Responsive Design</span>
-                        <span class="px-4 py-2 bg-slate-800 rounded-full">Git & GitHub</span>
-                    </div>
-                </div>
-
-                <!-- Expanding Into -->
-                <div>
-                    <h3 class="text-xl font-semibold mb-4 text-white">
-                        Expanding Into
-                    </h3>
-                    <div class="flex flex-wrap gap-3">
-                        <span class="px-4 py-2 bg-slate-700 rounded-full">React.js</span>
-                        <span class="px-4 py-2 bg-slate-700 rounded-full">Node.js</span>
-                        <span class="px-4 py-2 bg-slate-700 rounded-full">Express.js</span>
-                        <span class="px-4 py-2 bg-slate-700 rounded-full">MongoDB</span>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-
-    <!-- Projects -->
-    <section id="projects" class="py-24 bg-black/30 backdrop-blur-md">
-        <div class="max-w-6xl mx-auto px-6">
-
-            <h2 class="text-3xl font-bold text-cyan-400 text-center mb-16">
-                Projects
-            </h2>
-
-            <!--  FEATURED PROJECTS -->
-            <div id="featured-section" class="mb-24">
-
-                <div class="flex justify-between items-center mb-10">
-                    <h3 class="text-2xl font-semibold text-white">
-                        Featured Projects
-                    </h3>
-
-                    <button id="seeMoreBtn" class="hidden px-5 py-2 rounded-full 
-             bg-gradient-to-r from-cyan-400 to-teal-400 
-             text-black font-medium 
-             hover:scale-105 transition-all duration-300
-             shadow-lg shadow-cyan-400/30">
-                        Explore Featured
-                    </button>
-                </div>
-
-                <div id="featured-container" class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 
-              gap-14 transition-opacity duration-300">
-                </div>
-
-                <!-- Featured Pagination -->
-                <div id="featuredPagination" class="flex justify-center items-center gap-6 mt-12 hidden">
-
-                    <button id="featuredPrev"
-                        class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-cyan-400 hover:text-black transition">
-                        Prev
-                    </button>
-
-                    <span id="featuredPageNumber" class="text-slate-300"></span>
-
-                    <button id="featuredNext"
-                        class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-cyan-400 hover:text-black transition">
-                        Next
-                    </button>
-
-                </div>
-
-            </div>
-
-            <!--  ALL PROJECTS -->
-            <div>
-                <h3 class="text-2xl font-semibold text-white mb-10">
-                    All Projects
-                </h3>
-
-                <div id="project-container"
-                    class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-14 transition-opacity duration-500 opacity-100">
-                </div>
-
-                <!-- Pagination -->
-                <div class="flex justify-center items-center gap-10 mt-16">
-                    <button id="prevBtn"
-                        class="px-6 py-2 rounded-xl bg-slate-900 hover:bg-cyan-400 hover:text-black transition">
-                        Prev
-                    </button>
-
-                    <span id="pageNumber" class="text-slate-300 text-lg"></span>
-
-                    <button id="nextBtn"
-                        class="px-6 py-2 rounded-xl bg-slate-900 hover:bg-cyan-400 hover:text-black transition">
-                        Next
-                    </button>
-                </div>
-
-            </div>
-
-        </div>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact" class="py-24 bg-[#1e3a4c]">
-        <div class="max-w-4xl mx-auto px-6 text-center">
-
-            <h2 class="text-3xl font-bold text-cyan-400 mb-12">
-                Contact Me
-            </h2>
-
-            <div class="w-fit mx-auto space-y-8 text-left">
-
-                <a href="mailto:rezanurbinshamim@gmail.com"
-                    class="flex items-center gap-5 hover:text-cyan-400 transition">
-                    <i class="fa-solid fa-envelope text-2xl w-8 text-center"></i>
-                    <span class="text-lg">rezanurbinshamim@gmail.com</span>
-                </a>
-
-                <a href="tel:01869529572" class="flex items-center gap-5 hover:text-cyan-400 transition">
-                    <i class="fa-solid fa-phone text-2xl w-8 text-center"></i>
-                    <span class="text-lg">01869529572</span>
-                </a>
-
-                <a href="https://facebook.com/rnrezanur" target="_blank"
-                    class="flex items-center gap-5 hover:text-cyan-400 transition">
-                    <i class="fa-brands fa-facebook text-2xl w-8 text-center"></i>
-                    <span class="text-lg">Facebook Profile</span>
-                </a>
-
-                <a href="https://github.com/Rnrezanur" target="_blank"
-                    class="flex items-center gap-5 hover:text-cyan-400 transition">
-                    <i class="fa-brands fa-github text-2xl w-8 text-center"></i>
-                    <span class="text-lg">GitHub Profile</span>
-                </a>
-
-                <!-- <a href="https://linkedin.com/in/yourprofile" target="_blank"
-                    class="flex items-center gap-5 hover:text-cyan-400 transition">
-                    <i class="fa-brands fa-linkedin text-2xl w-8 text-center"></i>
-                    <span class="text-lg">LinkedIn Profile</span>
-                </a> -->
-
-            </div>
-
-        </div>
-    </section>
-
-    <footer class="text-center py-6 bg-black/40 text-slate-400 text-sm">
-        © 2026 Rezanur Bin Shamim | Developer
-    </footer>
-
+    </div>
 
 </body>
 

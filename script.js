@@ -1,54 +1,146 @@
-const elements = document.querySelectorAll('.fade-up');
+const elements = document.querySelectorAll(".fade-up");
 
 const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
+  entries.forEach((entry) => {
     if (entry.isIntersecting) {
-      entry.target.classList.add('show');
+      entry.target.classList.add("show");
+    }
+  });
+}, {
+  threshold: 0.18,
+  rootMargin: "0px 0px -10% 0px",
+});
+
+elements.forEach((el) => observer.observe(el));
+window.addEventListener("load", () => {
+  document.body.classList.add("page-ready");
+});
+
+function prepareScrollSequences(scope = document) {
+  const groups = [
+    ".timeline-resume",
+    ".skills-groups",
+    ".project-grid",
+    ".contact-list",
+  ];
+
+  groups.forEach((selector) => {
+    scope.querySelectorAll(selector).forEach((group) => {
+      Array.from(group.children).forEach((child, index) => {
+        child.classList.add("scroll-sequence-item");
+        child.style.setProperty("--reveal-delay", `${index * 110}ms`);
+        child.classList.remove("reveal-soft-left", "reveal-soft-right", "reveal-soft-up");
+        if (index === 0) {
+          child.classList.add("reveal-soft-up");
+        } else if (index % 2 === 0) {
+          child.classList.add("reveal-soft-right");
+        } else {
+          child.classList.add("reveal-soft-left");
+        }
+      });
+    });
+  });
+}
+
+prepareScrollSequences();
+
+const navLinks = document.querySelectorAll(".nav-link");
+const sectionIds = ["home", "about", "experience", "education", "skills", "projects", "contact"];
+const sections = sectionIds.map((id) => document.getElementById(id)).filter(Boolean);
+const menuToggle = document.getElementById("menuToggle");
+const menuClose = document.getElementById("menuClose");
+const sideMenu = document.getElementById("sideMenu");
+const menuOverlay = document.getElementById("menuOverlay");
+const sideMenuLinks = document.querySelectorAll(".side-menu-link");
+
+function setActiveLink(id) {
+  navLinks.forEach((link) => {
+    const isActive = link.getAttribute("href") === `#${id}`;
+    link.classList.toggle("active", isActive);
+  });
+}
+
+if (sections.length) {
+  function updateActiveSection() {
+    const probe = window.scrollY + window.innerHeight * 0.38;
+    let activeId = sections[0].id;
+
+    sections.forEach((section) => {
+      if (section.offsetTop <= probe) {
+        activeId = section.id;
+      }
+    });
+
+    setActiveLink(activeId);
+  }
+
+  updateActiveSection();
+  window.addEventListener("scroll", updateActiveSection, { passive: true });
+  window.addEventListener("resize", updateActiveSection);
+}
+
+navLinks.forEach((link) => {
+  link.addEventListener("click", () => {
+    const href = link.getAttribute("href");
+    if (href?.startsWith("#")) {
+      setActiveLink(href.slice(1));
     }
   });
 });
 
-elements.forEach(el => observer.observe(el));
+function toggleMenu(isOpen) {
+  if (!sideMenu || !menuOverlay || !menuToggle) {
+    return;
+  }
 
+  sideMenu.classList.toggle("is-open", isOpen);
+  menuOverlay.classList.toggle("is-open", isOpen);
+  menuToggle.classList.toggle("is-open", isOpen);
+  menuToggle.setAttribute("aria-expanded", String(isOpen));
+  sideMenu.setAttribute("aria-hidden", String(!isOpen));
+}
+
+menuToggle?.addEventListener("click", () => toggleMenu(true));
+menuClose?.addEventListener("click", () => toggleMenu(false));
+menuOverlay?.addEventListener("click", () => toggleMenu(false));
+sideMenuLinks.forEach((link) => {
+  link.addEventListener("click", () => toggleMenu(false));
+});
 
 const projects = [
-    {
-    title: "IntelliEco – Smart Eco-System Management Platform",
-    description: "A web app for monitoring and managing eco-friendly systems with smart data tracking.",
+  {
+    title: "IntelliEco Smart Eco-System Management Platform",
+    description: "A web app concept for monitoring and managing eco-friendly systems with smart data tracking.",
     demo: null,
     link: "https://github.com/Rnrezanur/intellieco-eco-system",
-    pinned: false
+    pinned: true,
+    tags: ["JavaScript", "Full Stack", "Dashboard"],
   },
-
   {
     title: "Simple Fashion UI",
-    description:"A responsive fashion landing page built with HTML and Tailwind CSS.",
-    demo: "https://simple-fashion.vercel.app",   // Live link
+    description: "A responsive fashion landing page focused on clean layout, stylish presentation, and modern visuals.",
+    demo: "https://simple-fashion.vercel.app",
     link: "https://github.com/Rnrezanur/simple-fashion",
-    pinned: false
+    pinned: false,
+    tags: ["HTML", "Tailwind", "Responsive"],
   },
-
   {
     title: "Influencer Gear",
-    description: "Responsive e-commerce product showcase built with HTML & CSS.",
+    description: "A responsive e-commerce showcase page designed to present products with a simple and polished layout.",
     demo: "https://influencer-gear-hazel.vercel.app/",
-    link:"",
-    pinned: false
+    link: "",
+    pinned: false,
+    tags: ["HTML", "CSS", "E-commerce UI"],
   },
-  
   {
     title: "Rock-Paper-Scissors",
-    description: "Interactive GUI game built with Python.",
+    description: "An interactive game project with a graphical interface and clear user feedback.",
     demo: null,
     link: "https://github.com/Rnrezanur/rock-paper-scissors",
-    pinned: false
-  }
-  
-
-
+    pinned: false,
+    tags: ["Python", "GUI", "Logic"],
+  },
 ];
-
-// for next page in feature pin option 
 
 const seeMoreBtn = document.getElementById("seeMoreBtn");
 const featuredPagination = document.getElementById("featuredPagination");
@@ -58,10 +150,10 @@ const featuredPageNumber = document.getElementById("featuredPageNumber");
 
 let showAllFeatured = false;
 let featuredPage = 1;
-const FEATURE_LIMIT = 3;
-const FEATURE_PER_PAGE = 6;
+const FEATURE_LIMIT = 2;
+const FEATURE_PER_PAGE = 4;
 
-const projectsPerPage = 6;
+const projectsPerPage = 4;
 let currentPage = 1;
 
 const container = document.getElementById("project-container");
@@ -70,25 +162,59 @@ const pageNumber = document.getElementById("pageNumber");
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 
+function renderTags(tags = []) {
+  return tags.map((tag) => `<span>${tag}</span>`).join("");
+}
 
+function createActionButton(label, href, type) {
+  if (!href) {
+    return "";
+  }
 
+  return `
+    <a href="${href}" target="_blank" class="project-btn ${type}">
+      ${label}
+    </a>
+  `;
+}
 
+function createCard(project) {
+  return `
+    <article class="project-card scroll-sequence-item">
+      <div class="project-tags">
+        ${renderTags(project.tags)}
+      </div>
 
-// DISPLAY FEATURED PROJECTS
+      <h3 class="project-title">${project.title}</h3>
 
+      <p class="project-desc">
+        ${project.description}
+      </p>
+
+      <div class="project-actions">
+        ${createActionButton("Live Demo", project.demo, "primary")}
+        ${createActionButton("GitHub", project.link, "secondary")}
+      </div>
+    </article>
+  `;
+}
 
 function displayFeatured() {
-
-  featuredContainer.innerHTML = "";
-
-  const featuredProjects = projects.filter(p => p.pinned);
-
-  if (featuredProjects.length === 0) {
-    document.getElementById("featured-section").style.display = "none";
+  if (!featuredContainer) {
     return;
   }
 
-  // If less than limit → no button
+  featuredContainer.innerHTML = "";
+  const featuredProjects = projects.filter((project) => project.pinned);
+
+  if (featuredProjects.length === 0) {
+    const featuredSection = document.getElementById("featured-section");
+    if (featuredSection) {
+      featuredSection.style.display = "none";
+    }
+    return;
+  }
+
   if (featuredProjects.length > FEATURE_LIMIT) {
     seeMoreBtn.classList.remove("hidden");
   } else {
@@ -96,177 +222,111 @@ function displayFeatured() {
   }
 
   if (!showAllFeatured) {
-
-    // Default mode → show only 3
-    const initial = featuredProjects.slice(0, FEATURE_LIMIT);
-    initial.forEach(project => {
+    featuredProjects.slice(0, FEATURE_LIMIT).forEach((project) => {
       featuredContainer.innerHTML += createCard(project);
     });
 
     featuredPagination.classList.add("hidden");
-
   } else {
-
-    // Paginated mode
     const start = (featuredPage - 1) * FEATURE_PER_PAGE;
     const end = start + FEATURE_PER_PAGE;
 
-    const current = featuredProjects.slice(start, end);
-
-    current.forEach(project => {
+    featuredProjects.slice(start, end).forEach((project) => {
       featuredContainer.innerHTML += createCard(project);
     });
 
     const totalPages = Math.ceil(featuredProjects.length / FEATURE_PER_PAGE);
-
-    featuredPageNumber.textContent =
-      `Page ${featuredPage} of ${totalPages}`;
-
+    featuredPageNumber.textContent = `Page ${featuredPage} of ${totalPages}`;
     featuredPrev.disabled = featuredPage === 1;
     featuredNext.disabled = featuredPage === totalPages;
-
     featuredPagination.classList.remove("hidden");
   }
 
-  seeMoreBtn.textContent = showAllFeatured
-    ? "Collapse Featured"
-    : "Explore Featured";
+  prepareScrollSequences(featuredContainer.parentElement ?? document);
+  seeMoreBtn.textContent = showAllFeatured ? "Collapse Featured" : "Explore Featured";
 }
 
-// Featured Pagination Events
-
-featuredPrev.addEventListener("click", () => {
-  if (featuredPage > 1) {
-    featuredPage--;
-    displayFeatured();
-  }
-});
-
-featuredNext.addEventListener("click", () => {
-  const featuredProjects = projects.filter(p => p.pinned);
-  const totalPages = Math.ceil(featuredProjects.length / FEATURE_PER_PAGE);
-
-  if (featuredPage < totalPages) {
-    featuredPage++;
-    displayFeatured();
-  }
-});
-
-
-// DISPLAY ALL PROJECTS (EXCLUDING PINNED)
-
 function displayProjects() {
+  if (!container) {
+    return;
+  }
 
   container.classList.remove("opacity-100");
   container.classList.add("opacity-0");
 
   setTimeout(() => {
-
     container.innerHTML = "";
 
-    const nonPinned = projects.filter(p => !p.pinned);
-
+    const nonPinned = projects.filter((project) => !project.pinned);
     const start = (currentPage - 1) * projectsPerPage;
     const end = start + projectsPerPage;
 
-    const currentProjects = nonPinned.slice(start, end);
-
-    currentProjects.forEach(project => {
+    nonPinned.slice(start, end).forEach((project) => {
       container.innerHTML += createCard(project);
     });
 
-    const totalPages = Math.ceil(nonPinned.length / projectsPerPage);
-
+    const totalPages = Math.max(1, Math.ceil(nonPinned.length / projectsPerPage));
     pageNumber.textContent = `Page ${currentPage} of ${totalPages}`;
-
     prevBtn.disabled = currentPage === 1;
     nextBtn.disabled = currentPage === totalPages;
 
+    Array.from(container.children).forEach((child, index) => {
+      child.style.setProperty("--reveal-delay", `${index * 110}ms`);
+      child.classList.add("show");
+      child.classList.remove("reveal-soft-left", "reveal-soft-right", "reveal-soft-up");
+      if (index === 0) {
+        child.classList.add("reveal-soft-up");
+      } else if (index % 2 === 0) {
+        child.classList.add("reveal-soft-right");
+      } else {
+        child.classList.add("reveal-soft-left");
+      }
+    });
+
     container.classList.remove("opacity-0");
     container.classList.add("opacity-100");
-
-  }, 300);
+  }, 220);
 }
 
+featuredPrev?.addEventListener("click", () => {
+  if (featuredPage > 1) {
+    featuredPage -= 1;
+    displayFeatured();
+  }
+});
 
+featuredNext?.addEventListener("click", () => {
+  const featuredProjects = projects.filter((project) => project.pinned);
+  const totalPages = Math.ceil(featuredProjects.length / FEATURE_PER_PAGE);
 
-// CARD TEMPLATE
+  if (featuredPage < totalPages) {
+    featuredPage += 1;
+    displayFeatured();
+  }
+});
 
-function createCard(project) {
-  return `
-    <div class="bg-slate-900 p-8 rounded-2xl
-                hover:-translate-y-3
-                hover:shadow-2xl
-                hover:shadow-cyan-400/30
-                transition-all duration-300
-                flex flex-col
-                min-h-[260px]">
-
-      <h3 class="font-semibold text-xl mb-4 text-white">
-        ${project.title}
-      </h3>
-
-      <p class="text-slate-400 text-sm mb-6 flex-grow">
-        ${project.description}
-      </p>
-
-      <div class="flex gap-4 mt-auto">
-
-        ${project.demo ? `
-          <a href="${project.demo}" target="_blank"
-             class="px-4 py-2 bg-cyan-400 text-black 
-                    rounded-lg font-medium 
-                    hover:bg-white transition">
-            Live Demo
-          </a>
-        ` : ''}
-
-        <a href="${project.link}" target="_blank"
-           class="px-4 py-2 border border-cyan-400 text-cyan-400 
-                  rounded-lg font-medium 
-                  hover:bg-cyan-400 hover:text-black transition">
-          GitHub
-        </a>
-
-      </div>
-
-    </div>
-  `;
-}
-
-
-
-// Pagination Events
-
-prevBtn.addEventListener("click", () => {
+prevBtn?.addEventListener("click", () => {
   if (currentPage > 1) {
-    currentPage--;
+    currentPage -= 1;
     displayProjects();
   }
 });
 
-nextBtn.addEventListener("click", () => {
-  const nonPinned = projects.filter(p => !p.pinned);
-  const totalPages = Math.ceil(nonPinned.length / projectsPerPage);
+nextBtn?.addEventListener("click", () => {
+  const nonPinned = projects.filter((project) => !project.pinned);
+  const totalPages = Math.max(1, Math.ceil(nonPinned.length / projectsPerPage));
 
   if (currentPage < totalPages) {
-    currentPage++;
+    currentPage += 1;
     displayProjects();
   }
 });
 
-
-
-// See More Toggle
-
-seeMoreBtn.addEventListener("click", () => {
+seeMoreBtn?.addEventListener("click", () => {
   showAllFeatured = !showAllFeatured;
   featuredPage = 1;
   displayFeatured();
 });
 
-
-
-// Initialize
 displayFeatured();
 displayProjects();
