@@ -199,6 +199,7 @@ const menuClose = document.getElementById("menuClose");
 const sideMenu = document.getElementById("sideMenu");
 const menuOverlay = document.getElementById("menuOverlay");
 const sideMenuLinks = document.querySelectorAll(".side-menu-link");
+const scrollTopShortcut = document.getElementById("scrollTopShortcut");
 
 function setActiveLink(id) {
   navLinks.forEach((link) => {
@@ -221,8 +222,18 @@ if (sections.length) {
     setActiveLink(activeId);
   }
 
+  function updateScrollShortcut() {
+    if (!scrollTopShortcut) {
+      return;
+    }
+
+    scrollTopShortcut.classList.toggle("is-visible", window.scrollY > 420);
+  }
+
   updateActiveSection();
+  updateScrollShortcut();
   window.addEventListener("scroll", updateActiveSection, { passive: true });
+  window.addEventListener("scroll", updateScrollShortcut, { passive: true });
   window.addEventListener("resize", updateActiveSection);
 }
 

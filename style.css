@@ -662,8 +662,8 @@ body.page-ready .intro-section .stat-card:nth-child(2) {
   letter-spacing: 0.01em;
 }
 
-.hero-actions .hero-btn {
-  margin-right: auto;
+.hero-actions .hero-btn:first-child {
+  margin-right: 0;
 }
 
 .hero-actions .ghost-btn:hover {
@@ -1517,6 +1517,48 @@ body.page-ready .intro-section .stat-card:nth-child(2) {
   transform: translateY(-50%) translateX(0);
 }
 
+.scroll-top-shortcut {
+  position: fixed;
+  right: 78px;
+  bottom: 34px;
+  width: 50px;
+  height: 50px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(25, 25, 25, 0.92);
+  color: #f1f2f4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(18px);
+  pointer-events: none;
+  transition:
+    opacity 0.28s ease,
+    transform 0.28s ease,
+    visibility 0.28s ease,
+    border-color 0.28s ease,
+    color 0.28s ease,
+    background 0.28s ease;
+  z-index: 45;
+}
+
+.scroll-top-shortcut.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.scroll-top-shortcut:hover {
+  color: var(--accent);
+  border-color: rgba(44, 233, 138, 0.28);
+  background: rgba(25, 25, 25, 0.98);
+}
+
 .fade-up {
   opacity: 0;
   transform: translate3d(0, 44px, 0) scale(0.996);
@@ -1826,6 +1868,10 @@ button:disabled {
     right: 24px;
     top: 28px;
   }
+
+  .scroll-top-shortcut {
+    right: 24px;
+  }
 }
 
 @media (max-width: 900px) {
@@ -1863,6 +1909,13 @@ button:disabled {
     right: 18px;
     width: 56px;
     height: 56px;
+  }
+
+  .scroll-top-shortcut {
+    right: 18px;
+    bottom: 22px;
+    width: 46px;
+    height: 46px;
   }
 
   .side-menu {
