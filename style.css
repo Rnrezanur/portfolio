@@ -418,6 +418,15 @@ a {
   align-items: center;
 }
 
+#home { order: 1; }
+#about { order: 2; }
+#skills { order: 3; }
+#experience { order: 4; }
+#projects { order: 5; }
+#achievements { order: 6; }
+#education { order: 7; }
+#contact { order: 8; }
+
 .content-section {
   width: 100%;
   max-width: 930px;
@@ -555,6 +564,19 @@ body.page-ready .intro-section .stat-card:nth-child(2) {
   color: var(--accent);
   display: inline-block;
   animation: accentGlow 4.8s ease-in-out infinite;
+}
+
+.theme-inline-accent {
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.theme-inline-keep {
+  white-space: nowrap;
+}
+
+.contact-section-title {
+  font-size: clamp(1.72rem, 2.95vw, 2.6rem);
 }
 
 .hero-heading-trace,
@@ -1129,6 +1151,18 @@ body.page-ready .intro-section .stat-card:nth-child(2) {
   transition: color 0.3s ease;
 }
 
+.timeline-meta a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.25s ease, border-color 0.25s ease;
+}
+
+.timeline-meta a:hover {
+  color: #dfe4e9;
+  border-color: rgba(44, 233, 138, 0.3);
+}
+
 .timeline-block:hover .timeline-meta {
   color: #c2c8cf;
 }
@@ -1261,6 +1295,55 @@ body.page-ready .intro-section .stat-card:nth-child(2) {
   max-width: 760px;
   display: grid;
   gap: 28px;
+}
+
+.achievement-list {
+  width: 100%;
+  max-width: 760px;
+  display: grid;
+  gap: 14px;
+}
+
+.achievement-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 20px;
+  align-items: start;
+  padding: 18px 0 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.28s ease, border-color 0.28s ease;
+}
+
+.achievement-item:first-child {
+  padding-top: 0;
+}
+
+.achievement-item:hover {
+  transform: translateX(6px);
+  border-color: rgba(44, 233, 138, 0.18);
+}
+
+.achievement-copy h3 {
+  margin: 0 0 6px;
+  color: #f2f2f2;
+  font-size: 1.08rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.achievement-copy p {
+  margin: 0;
+  color: #9ca2aa;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.achievement-year {
+  color: var(--accent);
+  font-size: 0.92rem;
+  font-weight: 600;
+  white-space: nowrap;
+  padding-top: 2px;
 }
 
 .skills-group {
@@ -1962,7 +2045,8 @@ button:disabled {
   .education-title,
   .education-divider,
   .timeline-resume,
-  .skills-groups {
+  .skills-groups,
+  .achievement-list {
     max-width: 100%;
   }
 
@@ -2045,6 +2129,10 @@ button:disabled {
   .skills-groups {
     max-width: 100%;
     gap: 24px;
+  }
+
+  .achievement-list {
+    max-width: 100%;
   }
 
   .skills-badges {
@@ -2187,6 +2275,29 @@ button:disabled {
 
   .hero-heading {
     font-size: 2.35rem;
+  }
+
+  .contact-section-title {
+    font-size: 1.9rem;
+    line-height: 1.2;
+  }
+
+  .contact-section-title br {
+    display: none;
+  }
+
+  .contact-section-title .theme-inline-keep,
+  .contact-section-title .theme-inline-accent {
+    white-space: normal;
+  }
+
+  .achievement-item {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .achievement-year {
+    padding-top: 0;
   }
 
   .section-title {
