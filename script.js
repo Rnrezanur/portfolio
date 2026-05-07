@@ -192,7 +192,7 @@ function prepareScrollSequences(scope = document) {
 prepareScrollSequences();
 
 const navLinks = document.querySelectorAll(".nav-link");
-const sectionIds = ["home", "about", "skills", "experience", "projects", "achievements", "education", "contact"];
+const sectionIds = ["home", "about", "skills", "experience", "projects", "education", "achievements", "contact"];
 const sections = sectionIds.map((id) => document.getElementById(id)).filter(Boolean);
 const menuToggle = document.getElementById("menuToggle");
 const menuClose = document.getElementById("menuClose");
