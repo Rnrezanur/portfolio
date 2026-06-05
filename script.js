@@ -274,6 +274,14 @@ const projects = [
     pinned: true,
     tags: ["JavaScript", "Full Stack", "Dashboard"],
   },
+    {
+    title: "TaskGram",
+    description: "TaskGram is a Telegram-based task manager that sends automated reminders for scheduled tasks.",
+    demo: "https://task-gram-one.vercel.app",
+    link: "https://github.com/Rnrezanur/TaskGram",
+    pinned: true,
+    tags: ["Automated Reminders", "Typescript","Telegram Bot", "PLpgSQL"],
+  },
   {
     title: "Simple Fashion UI",
     description: "A responsive fashion landing page focused on clean layout, stylish presentation, and modern visuals.",
