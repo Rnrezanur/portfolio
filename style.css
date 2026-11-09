@@ -32,7 +32,13 @@ body {
   color: var(--text);
   position: relative;
   background: var(--bg);
+  overflow-x: hidden;
   overflow-x: clip;
+}
+
+body.menu-locked {
+  overflow: hidden !important;
+  touch-action: none;
 }
 
 img {
@@ -129,11 +135,13 @@ a {
 .menu-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.56);
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
-  z-index: 54;
+  z-index: 90;
 }
 
 .menu-overlay.is-open {
@@ -147,15 +155,20 @@ a {
   right: 0;
   width: min(360px, 92vw);
   height: 100vh;
-  padding: 56px 44px;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: clamp(32px, 5vh, 52px) clamp(22px, 5vw, 40px);
   background: #191919;
   border-left: 1px solid rgba(255, 255, 255, 0.08);
   transform: translateX(100%);
-  transition: transform 0.35s ease;
-  z-index: 70;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 95;
   display: flex;
   flex-direction: column;
-  box-shadow: -18px 0 40px rgba(0, 0, 0, 0.24);
+  box-shadow: -18px 0 40px rgba(0, 0, 0, 0.3);
 }
 
 .side-menu.is-open {
@@ -332,6 +345,9 @@ a {
   margin: 1rem 0 1.3rem;
   overflow: hidden;
   border-radius: 1.45rem;
+  max-width: 320px;
+  width: 100%;
+  margin-inline: auto;
 }
 
 .profile-image {
@@ -356,13 +372,23 @@ a {
   min-width: 0;
 }
 
-.profile-email,
 .profile-location {
+  margin: 0;
+  color: #ededed;
+  font-size: clamp(0.92rem, 1.2vw, 1.08rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.profile-email {
   margin: 0;
   color: #efefef;
   font-size: 0.86rem;
   line-height: 1.4;
   overflow-wrap: anywhere;
+  word-break: break-all;
 }
 
 .profile-copy {
@@ -375,11 +401,26 @@ a {
 .social-row {
   display: flex;
   justify-content: center;
-  gap: 0.45rem;
+  align-items: center;
+  gap: clamp(6px, 1.8vw, 10px);
   margin: 1.15rem 0 1.35rem;
+  flex-wrap: nowrap;
 }
 
-.social-row a,
+.social-row a {
+  width: clamp(38px, 9.5vw, 46px);
+  height: clamp(38px, 9.5vw, 46px);
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: clamp(0.85rem, 2.2vw, 1rem);
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
 .dock-nav a {
   width: 46px;
   height: 46px;
@@ -2262,14 +2303,34 @@ button:disabled {
 
 }
 
-@media (max-width: 1500px) {
+/* ==========================================================================
+   RESPONSIVE LAYOUT SYSTEM - EVERY SCREEN SIZE
+   ========================================================================== */
+
+/* 1. Ultra-Wide & 4K Displays (> 1600px) */
+@media (min-width: 1600px) {
   :root {
-    --content-offset: clamp(0rem, 4vw, 4rem);
-    --sidebar-width: clamp(16.75rem, 22vw, 21.5rem);
+    --shell-max: 96rem;
+    --layout-gap: 3.5rem;
+    --sidebar-width: 22.5rem;
   }
 
   .page-shell {
-    grid-template-columns: minmax(17rem, 22rem) minmax(0, 1fr);
+    max-width: var(--shell-max);
+    margin-inline: auto;
+    padding-inline: 2rem;
+  }
+}
+
+/* 2. Large Laptops & Desktops (<= 1500px) */
+@media (max-width: 1500px) {
+  :root {
+    --content-offset: clamp(0rem, 3.5vw, 3rem);
+    --sidebar-width: clamp(16.75rem, 21vw, 21rem);
+  }
+
+  .page-shell {
+    grid-template-columns: minmax(17rem, var(--sidebar-width)) minmax(0, 1fr);
   }
 
   .dock-nav {
@@ -2286,29 +2347,30 @@ button:disabled {
   }
 }
 
+/* 3. Medium Screens / Compact Laptops (<= 1200px) */
 @media (max-width: 1200px) {
   :root {
     --content-offset: clamp(0rem, 2vw, 1.5rem);
-    --section-max: 52rem;
-    --sidebar-width: clamp(17rem, 27vw, 20.75rem);
-    --layout-gap: clamp(1rem, 2.2vw, 1.75rem);
+    --section-max: 50rem;
+    --sidebar-width: clamp(16.5rem, 26vw, 20rem);
+    --layout-gap: clamp(1rem, 2vw, 1.75rem);
   }
 
   .page-shell {
-    grid-template-columns: minmax(17rem, 20.75rem) minmax(0, 1fr);
+    grid-template-columns: minmax(16.5rem, var(--sidebar-width)) minmax(0, 1fr);
   }
 
   .content-section,
   .intro-section {
-    padding-inline: clamp(0.35rem, 1.2vw, 0.9rem);
+    padding-inline: clamp(0.25rem, 1vw, 0.75rem);
   }
 
   .hero-heading {
-    font-size: clamp(2.7rem, 4.8vw, 4.35rem);
+    font-size: clamp(2.5rem, 4.5vw, 4rem);
   }
 
   .hero-text {
-    max-width: min(100%, 36rem);
+    max-width: min(100%, 35rem);
   }
 
   .hero-actions .hero-btn {
@@ -2318,11 +2380,12 @@ button:disabled {
   }
 }
 
+/* 4. Tablets & Small Laptops (<= 1024px) */
 @media (max-width: 1024px) {
   .page-shell {
     grid-template-columns: 1fr;
-    gap: 1.75rem;
-    padding: 0.875rem;
+    gap: 2rem;
+    padding: clamp(0.75rem, 2vw, 1.25rem);
   }
 
   .content-column {
@@ -2333,15 +2396,19 @@ button:disabled {
   .profile-card {
     position: relative;
     top: 0;
-    max-width: min(100%, 38rem);
+    max-width: min(100%, 36rem);
+    margin-inline: auto;
+    justify-self: center;
     min-height: auto;
+    animation: none;
   }
 
   .content-section {
-    width: min(100%, 48rem);
+    width: min(100%, 46rem);
     max-width: none;
+    margin-inline: auto;
     padding-inline: 0;
-    margin-bottom: 4.5rem;
+    margin-bottom: 4rem;
   }
 
   .intro-section {
@@ -2350,14 +2417,15 @@ button:disabled {
     align-items: stretch;
     justify-content: flex-start;
     width: 100%;
-    max-width: 48rem;
+    max-width: 46rem;
+    margin-inline: auto;
     padding-inline: 0;
-    padding-block: 3rem 2.5rem;
+    padding-block: 2.5rem 2rem;
   }
 
   .hero-heading {
     max-width: 100%;
-    font-size: clamp(2.5rem, 7vw, 3.5rem);
+    font-size: clamp(2.35rem, 6.5vw, 3.35rem);
   }
 
   .hero-copy,
@@ -2367,109 +2435,41 @@ button:disabled {
   }
 
   .menu-toggle {
-    top: 18px;
-    right: 18px;
-    width: 56px;
-    height: 56px;
+    top: max(18px, env(safe-area-inset-top, 18px));
+    right: max(18px, env(safe-area-inset-right, 18px));
+    width: 54px;
+    height: 54px;
   }
 
   .scroll-top-shortcut {
-    right: 18px;
-    bottom: 22px;
+    right: max(18px, env(safe-area-inset-right, 18px));
+    bottom: max(22px, env(safe-area-inset-bottom, 22px));
     width: 46px;
     height: 46px;
   }
-}
 
-@media (max-height: 860px) and (min-width: 1025px) {
-  .profile-card {
-    min-height: auto;
-    justify-content: flex-start;
+  .project-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16.5rem), 1fr));
   }
 }
 
+/* 5. Small Tablets & Phablets (<= 900px) */
 @media (max-width: 900px) {
-  .page-shell {
-    grid-template-columns: 1fr;
-    gap: 1.75rem;
-    padding: 0.875rem;
-  }
-
-  .content-column {
-    width: 100%;
-    align-items: stretch;
-  }
-
   .profile-card {
-    position: relative;
-    top: 0;
-    max-width: min(100%, 40rem);
-    margin-inline: auto;
-    justify-self: center;
-    min-height: auto;
+    max-width: min(100%, 36rem);
+  }
+
+  /* Safe clear zone on right side for the floating hamburger button */
+  .profile-head {
+    padding-right: 64px;
   }
 
   .profile-brand {
-    font-size: 2.55rem;
-  }
-
-  .profile-role p {
-    font-size: 0.82rem;
-  }
-
-  .menu-toggle {
-    top: 18px;
-    right: 18px;
-    width: 56px;
-    height: 56px;
-  }
-
-  .scroll-top-shortcut {
-    right: 18px;
-    bottom: 22px;
-    width: 46px;
-    height: 46px;
+    font-size: clamp(2.1rem, 5vw, 2.45rem);
   }
 
   .side-menu {
-    padding: 40px 26px;
-  }
-
-  .intro-section {
-    min-height: auto;
-    display: flex;
-    align-items: stretch;
-    justify-content: flex-start;
-    width: 100%;
-    padding-block: 3rem 2.5rem;
-  }
-
-  .content-section {
-    width: min(100%, 48rem);
-    max-width: none;
-    padding-inline: 0;
-    margin-bottom: 4.5rem;
-  }
-
-  .hero-heading {
-    max-width: 100%;
-    font-size: clamp(2.5rem, 7vw, 3.5rem);
-  }
-
-  .hero-copy {
-    max-width: 100%;
-  }
-
-  .hero-text {
-    max-width: 100%;
-  }
-
-  .hero-heading-trace span {
-    width: 132px;
-  }
-
-  .hero-highlights {
-    margin-top: 18px;
+    padding: clamp(32px, 5vh, 48px) clamp(20px, 4vw, 32px);
   }
 
   .section-title,
@@ -2483,60 +2483,36 @@ button:disabled {
   }
 
   .dev-console-shell {
-    padding: 28px 24px 32px;
+    padding: 24px 20px 28px;
   }
 
   .dev-console-code {
-    min-height: 340px;
-    padding: 24px 20px 74px;
+    min-height: 280px;
+    padding: 20px 16px 64px;
   }
 
   .dev-console-title {
-    font-size: 0.96rem;
+    font-size: 0.94rem;
   }
 
   .hero-actions {
-    margin-top: 24px;
-  }
-
-  .education-item,
-  .resume-head {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .education-right {
-    justify-items: start;
-    text-align: left;
-  }
-
-  .resume-duration {
-    text-align: left;
-  }
-
-  .education-divider,
-  .education-list,
-  .resume-list {
-    max-width: 100%;
+    margin-top: 22px;
   }
 
   .timeline-resume {
     max-width: 100%;
-    padding-left: 8px;
+    padding-left: 6px;
   }
 
   .timeline-block {
-    grid-template-columns: 28px minmax(0, 1fr);
-    gap: 18px;
-    padding-bottom: 34px;
+    grid-template-columns: 26px minmax(0, 1fr);
+    gap: 16px;
+    padding-bottom: 32px;
   }
 
-  .timeline-resume::before {
-    left: 13px;
-  }
-
+  .timeline-resume::before,
   .timeline-resume::after {
-    left: 13px;
+    left: 12px;
   }
 
   .timeline-dot {
@@ -2546,25 +2522,22 @@ button:disabled {
   }
 
   .timeline-period {
-    margin-bottom: 18px;
-    font-size: 0.98rem;
+    margin-bottom: 14px;
+    font-size: 0.94rem;
   }
 
   .timeline-role {
-    font-size: 1.35rem;
+    font-size: clamp(1.2rem, 3.5vw, 1.45rem);
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
 
   .timeline-meta {
-    font-size: 0.95rem;
+    font-size: 0.92rem;
   }
 
   .skills-groups {
-    max-width: 100%;
-    gap: 24px;
-  }
-
-  .achievement-list {
-    max-width: 100%;
+    gap: 22px;
   }
 
   .skills-badges {
@@ -2572,150 +2545,391 @@ button:disabled {
   }
 
   .skill-badge {
-    padding: 11px 14px;
-    font-size: 0.9rem;
-  }
-
-  .hero-lower {
-    flex-direction: column;
-    gap: 30px;
-    margin-top: 40px;
-  }
-
-  .hero-projects-badge {
-    margin: 0 auto;
-  }
-
-  .stats-grid,
-  .service-grid,
-  .skill-showcase {
-    grid-template-columns: 1fr;
-  }
-
-  .stats-grid {
-    gap: 34px;
-    margin-top: 0;
-    justify-content: center;
-  }
-
-  .experience-row {
-    grid-template-columns: 30px minmax(0, 1fr);
-    gap: 20px;
-  }
-
-  .experience-period {
-    font-size: 1.25rem;
-  }
-
-  .experience-entry h3 {
-    font-size: 1.5rem;
+    padding: 10px 14px;
+    font-size: 0.88rem;
   }
 }
 
+/* 6. Standard Mobile Devices (<= 600px) */
 @media (max-width: 600px) {
   body::after {
     inset: -20%;
-    opacity: 0.56;
+    opacity: 0.52;
     filter: blur(10px);
   }
 
+  .page-shell {
+    padding: 0.65rem;
+    gap: 1.5rem;
+  }
+
   .content-section {
-    margin-bottom: 56px;
+    margin-bottom: 48px;
   }
 
   .profile-card {
     max-width: 100%;
-    padding: 1.5rem 1.125rem;
+    padding: 1.35rem 1rem 1.4rem;
+    border-radius: 1.6rem;
   }
 
-  .section-kicker {
-    margin-top: 12px;
-    margin-bottom: 20px;
+  /* Safe clear zone so menu-toggle NEVER overlaps header text */
+  .profile-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 12px;
+    padding-right: 58px;
   }
 
-  .dev-console {
-    margin-top: 28px;
-    padding-top: 14px;
+  .profile-brand {
+    font-size: clamp(1.85rem, 7vw, 2.25rem);
+    line-height: 1;
   }
 
-  .dev-console-tab {
-    padding: 10px 14px;
+  .profile-role {
+    margin-left: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-top: 0;
+  }
+
+  .profile-role p {
+    display: inline;
+    margin: 0;
+    font-size: 0.78rem;
+    color: #9d9da5;
+  }
+
+  .profile-role p + p::before {
+    content: " ";
+  }
+
+  .status-dot {
+    margin-top: 0;
+    align-self: center;
+    width: 8px;
+    height: 8px;
+  }
+
+  .profile-image-wrap {
+    margin: 0.9rem 0 1.15rem;
+    border-radius: 1.25rem;
+    max-width: 270px;
+  }
+
+  .social-row {
+    gap: 6px;
+    margin: 1rem 0 1.2rem;
+  }
+
+  .social-row a {
+    width: 40px;
+    height: 40px;
     font-size: 0.88rem;
   }
 
-  .dev-console-shell {
-    padding: 26px 18px 28px;
-    border-radius: 22px;
+  .sidebar-cta {
+    min-height: 44px;
+    font-size: 0.86rem;
   }
 
-  .dev-console-top {
-    gap: 10px;
-    margin-bottom: 22px;
+  .section-kicker {
+    margin-top: 8px;
+    margin-bottom: 16px;
+    font-size: 0.76rem;
   }
 
-  .dev-console-dots span {
-    width: 11px;
-    height: 11px;
+  .section-title {
+    font-size: clamp(1.75rem, 6.8vw, 2.15rem);
+    line-height: 1.2;
   }
 
-  .dev-console-code {
-    min-height: 280px;
-    padding: 18px 14px 64px;
+  .section-text {
+    font-size: 0.94rem;
+    line-height: 1.65;
   }
 
-  .dev-console-line {
-    font-size: 0.9rem;
+  .hero-heading {
+    font-size: clamp(1.75rem, 7.5vw, 2.35rem);
+    line-height: 1.14;
   }
 
-  .dev-console-line-live {
-    margin-top: 38px;
+  .hero-heading-typed .typing-line {
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
 
-  .dev-console-badge {
-    width: calc(100% - 56px);
-    max-width: 220px;
-    padding: 11px 16px;
-    font-size: 0.84rem;
-  }
-
-  .dev-console-mark {
-    width: 54px;
-    height: 54px;
-    font-size: 1.15rem;
-  }
-
-  .hero-text {
-    margin-top: 26px;
+  .hero-heading-typed [data-typed-line="1"] {
+    white-space: normal;
   }
 
   .hero-heading-trace {
-    margin-top: 18px;
+    margin-top: 14px;
   }
 
-  .hero-chip {
-    width: 100%;
-    justify-content: center;
+  .hero-text {
+    margin-top: 20px;
+    font-size: 0.96rem;
+    line-height: 1.62;
   }
 
   .hero-actions {
     flex-direction: column;
     align-items: stretch;
-    gap: 12px;
-    max-width: 100%;
+    gap: 10px;
+    margin-top: 22px;
   }
 
   .hero-btn {
     width: 100%;
+    min-height: 46px;
     justify-content: center;
+    font-size: 0.88rem;
   }
 
-  .hero-heading {
-    font-size: 2.35rem;
+  /* Dev Console Terminal Box */
+  .dev-console {
+    margin-top: 24px;
+    padding-top: 12px;
   }
 
+  .dev-console-shell {
+    padding: 20px 14px 24px;
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .dev-console-top {
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .dev-console-dots span {
+    width: 10px;
+    height: 10px;
+  }
+
+  .dev-console-code {
+    min-height: auto;
+    padding: 14px 10px 54px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .dev-console-line {
+    font-size: clamp(0.74rem, 2.6vw, 0.88rem);
+    line-height: 1.5;
+  }
+
+  .dev-console-line-detail {
+    padding-left: clamp(10px, 3.2vw, 20px);
+  }
+
+  .dev-console-line-live {
+    margin-top: 24px;
+  }
+
+  .dev-console-mark {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    width: 42px;
+    height: 42px;
+    font-size: 1rem;
+    border-radius: 10px;
+  }
+
+  .dev-console-badge {
+    position: absolute;
+    left: 10px;
+    bottom: 8px;
+    transform: none;
+    width: auto;
+    max-width: calc(100% - 66px);
+    padding: 7px 12px;
+    font-size: 0.74rem;
+    border-radius: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  /* Project Grid & Cards */
+  .project-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .project-card {
+    padding: clamp(16px, 4vw, 20px);
+    border-radius: 18px;
+  }
+
+  .project-card-image {
+    height: clamp(160px, 44vw, 200px);
+    border-radius: 12px;
+    margin-bottom: 14px;
+  }
+
+  .project-title {
+    font-size: clamp(1.2rem, 4.5vw, 1.4rem);
+    margin: 12px 0 8px;
+    line-height: 1.3;
+  }
+
+  .project-tags {
+    gap: 6px;
+  }
+
+  .project-tags span {
+    padding: 5px 10px;
+    font-size: 0.74rem;
+  }
+
+  .portfolio-head {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .project-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .project-btn {
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
+    font-size: 0.84rem;
+  }
+
+  .explore-featured-btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+    font-size: 0.82rem;
+  }
+
+  /* Pagination Bar */
+  .pagination-row {
+    padding: 5px 8px;
+    gap: 8px;
+    margin-top: 26px;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .pagination-btn {
+    min-height: 36px;
+    padding: 0 14px;
+    font-size: 0.76rem;
+    gap: 6px;
+  }
+
+  .page-indicator-badge {
+    padding: 4px 11px;
+  }
+
+  .page-indicator {
+    font-size: 0.72rem;
+  }
+
+  /* Timeline */
+  .timeline-resume {
+    padding-left: 2px;
+  }
+
+  .timeline-block {
+    grid-template-columns: 22px minmax(0, 1fr);
+    gap: 14px;
+    padding-bottom: 26px;
+  }
+
+  .timeline-resume::before,
+  .timeline-resume::after {
+    left: 10px;
+  }
+
+  .timeline-dot {
+    width: 9px;
+    height: 9px;
+    margin-top: 6px;
+  }
+
+  .timeline-period {
+    margin-bottom: 10px;
+    font-size: 0.88rem;
+  }
+
+  .timeline-role {
+    font-size: clamp(1.15rem, 4.2vw, 1.35rem);
+    line-height: 1.3;
+  }
+
+  .timeline-meta {
+    font-size: 0.86rem;
+    line-height: 1.5;
+  }
+
+  .timeline-points {
+    margin-top: 10px;
+    padding-left: 14px;
+    gap: 8px;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  /* Skills */
+  .skills-groups {
+    gap: 18px;
+  }
+
+  .skills-badges {
+    gap: 8px;
+  }
+
+  .skill-badge {
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    gap: 7px;
+  }
+
+  .skill-badge i {
+    font-size: 0.82rem;
+  }
+
+  /* Achievements */
+  .achievement-item {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 14px 0 16px;
+  }
+
+  .achievement-copy h3 {
+    font-size: 0.96rem;
+    line-height: 1.4;
+    overflow-wrap: break-word;
+  }
+
+  .achievement-copy p {
+    font-size: 0.82rem;
+  }
+
+  .achievement-year {
+    padding-top: 0;
+    font-size: 0.82rem;
+  }
+
+  /* Contact */
   .contact-section-title {
-    font-size: 1.9rem;
-    line-height: 1.2;
+    font-size: clamp(1.45rem, 5.8vw, 1.95rem);
+    line-height: 1.24;
   }
 
   .contact-section-title br {
@@ -2727,37 +2941,287 @@ button:disabled {
     white-space: normal;
   }
 
-  .achievement-item {
-    grid-template-columns: 1fr;
-    gap: 8px;
+  .contact-list {
+    gap: 10px;
+    margin-top: 20px;
   }
 
-  .achievement-year {
-    padding-top: 0;
+  .contact-item {
+    padding: 13px 15px;
+    gap: 12px;
+    border-radius: 16px;
+    font-size: 0.86rem;
   }
 
-  .section-title {
-    font-size: 2rem;
+  .contact-item span {
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
-  .portfolio-head,
-  .project-actions {
-    flex-direction: column;
-    align-items: stretch;
+  .menu-toggle {
+    top: max(14px, env(safe-area-inset-top, 14px));
+    right: max(14px, env(safe-area-inset-right, 14px));
+    width: 50px;
+    height: 50px;
   }
 
-  .hero-projects-badge {
-    width: 136px;
-    height: 136px;
+  .scroll-top-shortcut {
+    right: max(14px, env(safe-area-inset-right, 14px));
+    bottom: max(18px, env(safe-area-inset-bottom, 18px));
+    width: 44px;
+    height: 44px;
+    font-size: 0.92rem;
+  }
+}
+
+/* 7. Compact Mobiles (<= 480px, e.g. iPhone 12/13/14 mini, standard Androids) */
+@media (max-width: 480px) {
+  .page-shell {
+    padding: 0.5rem;
+    gap: 1.25rem;
   }
 
-  .badge-center {
-    inset: 22px;
-    font-size: 1.9rem;
+  .profile-card {
+    padding: 1.2rem 0.85rem 1.25rem;
+    border-radius: 1.4rem;
   }
 
-  .badge-ring-text text {
-    font-size: 12px;
-    letter-spacing: 0.9px;
+  .profile-head {
+    padding-right: 54px;
+    gap: 4px 8px;
+  }
+
+  .profile-brand {
+    font-size: 1.95rem;
+  }
+
+  .profile-role p {
+    font-size: 0.74rem;
+  }
+
+  .profile-image-wrap {
+    max-width: 240px;
+  }
+
+  .social-row a {
+    width: 38px;
+    height: 38px;
+    font-size: 0.82rem;
+  }
+
+  .pagination-row {
+    padding: 4px 6px;
+    gap: 6px;
+  }
+
+  .pagination-btn {
+    min-height: 35px;
+    padding: 0 11px;
+    font-size: 0.73rem;
+    gap: 5px;
+  }
+
+  .page-indicator-badge {
+    padding: 4px 9px;
+  }
+
+  .page-indicator {
+    font-size: 0.7rem;
+  }
+
+  .education-title {
+    font-size: 1.65rem;
+    letter-spacing: 0.05em;
+  }
+}
+
+/* 8. Small / Foldable Outer Mobiles (<= 360px, e.g. 320px iPhone SE 1st gen, Galaxy Fold cover) */
+@media (max-width: 360px) {
+  .page-shell {
+    padding: 0.4rem;
+    gap: 1rem;
+  }
+
+  .profile-card {
+    padding: 1rem 0.75rem 1.15rem;
+    border-radius: 1.2rem;
+  }
+
+  .profile-head {
+    padding-right: 48px;
+  }
+
+  .profile-brand {
+    font-size: 1.7rem;
+  }
+
+  .profile-location {
+    font-size: 0.86rem;
+  }
+
+  .profile-email {
+    font-size: 0.78rem;
+  }
+
+  .profile-image-wrap {
+    max-width: 210px;
+    border-radius: 1rem;
+  }
+
+  .social-row {
+    gap: 5px;
+  }
+
+  .social-row a {
+    width: 35px;
+    height: 35px;
+    font-size: 0.78rem;
+  }
+
+  .hero-heading {
+    font-size: clamp(1.45rem, 7.5vw, 1.75rem);
+  }
+
+  .hero-btn {
+    min-height: 42px;
+    font-size: 0.82rem;
+    padding: 0 14px;
+  }
+
+  .dev-console-shell {
+    padding: 16px 10px 20px;
+    border-radius: 14px;
+  }
+
+  .dev-console-code {
+    padding: 10px 6px 48px;
+  }
+
+  .dev-console-line {
+    font-size: 0.72rem;
+  }
+
+  .dev-console-badge {
+    font-size: 0.68rem;
+    padding: 5px 8px;
+    max-width: calc(100% - 54px);
+  }
+
+  .dev-console-mark {
+    width: 36px;
+    height: 36px;
+    font-size: 0.88rem;
+  }
+
+  .timeline-block {
+    grid-template-columns: 18px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .timeline-resume::before,
+  .timeline-resume::after {
+    left: 8px;
+  }
+
+  .timeline-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .timeline-role {
+    font-size: 1.1rem;
+  }
+
+  .timeline-meta {
+    font-size: 0.82rem;
+  }
+
+  .timeline-points {
+    padding-left: 10px;
+    font-size: 0.8rem;
+  }
+
+  .skill-badge {
+    padding: 6px 10px;
+    font-size: 0.76rem;
+  }
+
+  .pagination-row {
+    padding: 3px 4px;
+    gap: 4px;
+  }
+
+  .pagination-btn {
+    min-height: 32px;
+    padding: 0 8px;
+    font-size: 0.68rem;
+  }
+
+  .page-indicator-badge {
+    padding: 3px 6px;
+  }
+
+  .page-indicator {
+    font-size: 0.66rem;
+  }
+
+  .menu-toggle {
+    width: 44px;
+    height: 44px;
+    top: 10px;
+    right: 10px;
+  }
+
+  .scroll-top-shortcut {
+    width: 40px;
+    height: 40px;
+    bottom: 14px;
+    right: 10px;
+  }
+}
+
+/* 9. Landscape Mobile Devices (Height <= 550px and orientation: landscape) */
+@media (max-height: 550px) and (orientation: landscape) {
+  .profile-card {
+    position: relative;
+    top: 0;
+    min-height: auto;
+  }
+
+  .side-menu {
+    padding-block: 24px;
+  }
+
+  .side-menu-nav {
+    gap: 10px;
+  }
+
+  .side-menu-link {
+    font-size: 0.9rem;
+  }
+
+  .dock-nav {
+    display: none;
+  }
+}
+
+/* 10. Touch Devices Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .project-card:hover,
+  .achievement-item:hover,
+  .contact-item:hover,
+  .timeline-block:hover .timeline-content {
+    transform: none;
+  }
+
+  .pagination-btn,
+  .explore-featured-btn,
+  .hero-btn,
+  .sidebar-cta,
+  .menu-toggle,
+  .scroll-top-shortcut,
+  .side-menu-link {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
 }

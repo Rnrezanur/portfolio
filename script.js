@@ -256,6 +256,12 @@ function toggleMenu(isOpen) {
   menuToggle.classList.toggle("is-open", isOpen);
   menuToggle.setAttribute("aria-expanded", String(isOpen));
   sideMenu.setAttribute("aria-hidden", String(!isOpen));
+  
+  if (isOpen) {
+    document.body.classList.add("menu-locked");
+  } else {
+    document.body.classList.remove("menu-locked");
+  }
 }
 
 menuToggle?.addEventListener("click", () => toggleMenu(true));
@@ -263,6 +269,18 @@ menuClose?.addEventListener("click", () => toggleMenu(false));
 menuOverlay?.addEventListener("click", () => toggleMenu(false));
 sideMenuLinks.forEach((link) => {
   link.addEventListener("click", () => toggleMenu(false));
+});
+
+window.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && sideMenu?.classList.contains("is-open")) {
+    toggleMenu(false);
+  }
+});
+
+window.addEventListener("resize", () => {
+  if (window.innerWidth > 1024 && sideMenu?.classList.contains("is-open")) {
+    toggleMenu(false);
+  }
 });
 
 let projects = [
