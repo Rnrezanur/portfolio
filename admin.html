@@ -663,16 +663,22 @@
         </button>
       </div>
 
-      <!-- Search & Refresh bar -->
-      <div class="flex items-center gap-3">
+      <!-- Search & Actions bar -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
         <div class="relative flex-1">
           <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-xs text-[#9d9da5]"></i>
           <input type="text" id="githubSearchInput" placeholder="Filter repositories by name or language..." class="input-field w-full pl-9 pr-3 py-2 rounded-lg text-xs" />
         </div>
-        <button id="refreshGithubBtn" class="ghost-btn px-3 py-2 rounded-lg text-xs font-mono-code flex items-center gap-1.5" title="Refresh repositories from GitHub">
-          <i class="fa-solid fa-arrows-rotate"></i>
-          <span>Refresh</span>
-        </button>
+        <div class="flex items-center gap-2">
+          <button id="importAllGithubBtn" class="accent-btn px-3 py-2 rounded-lg text-xs font-mono-code flex items-center gap-1.5" title="Import all non-added repositories with 1 click">
+            <i class="fa-solid fa-cloud-arrow-down"></i>
+            <span>Import All New</span>
+          </button>
+          <button id="refreshGithubBtn" class="ghost-btn px-3 py-2 rounded-lg text-xs font-mono-code flex items-center gap-1.5" title="Refresh repositories from GitHub">
+            <i class="fa-solid fa-arrows-rotate"></i>
+            <span>Refresh</span>
+          </button>
+        </div>
       </div>
 
       <!-- Repos List Container (Scrollable) -->

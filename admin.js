@@ -34,6 +34,7 @@
   const githubReposList = document.getElementById("githubReposList");
   const githubSearchInput = document.getElementById("githubSearchInput");
   const refreshGithubBtn = document.getElementById("refreshGithubBtn");
+  const importAllGithubBtn = document.getElementById("importAllGithubBtn");
   const githubReposCount = document.getElementById("githubReposCount");
   const quickGithubRepoBtn = document.getElementById("quickGithubRepoBtn");
   const projectModal = document.getElementById("projectModal");
@@ -711,6 +712,7 @@
   });
 
   refreshGithubBtn?.addEventListener("click", () => fetchGithubRepos(true));
+  importAllGithubBtn?.addEventListener("click", importAllGithubRepos);
   githubSearchInput?.addEventListener("input", renderGithubRepos);
 
   async function fetchGithubRepos(force = false) {
@@ -895,6 +897,79 @@
       alert(`Error importing repository: ${err.message}`);
     }
   };
+
+  // Bulk Import All New GitHub Repositories at Once
+  async function importAllGithubRepos() {
+    if (!githubRepos || githubRepos.length === 0) {
+      showToast("Please wait for repositories to finish loading.", "info");
+      return;
+    }
+
+    const newRepos = githubRepos.filter((repo) => {
+      if (repo.name.toLowerCase() === "rnrezanur") return false; // skip personal profile README repo
+      const alreadyExists = allProjects.some((p) => {
+        const matchLink = p.link && p.link.toLowerCase().trim() === repo.html_url.toLowerCase().trim();
+        const matchTitle = p.title && p.title.toLowerCase().trim() === repo.name.toLowerCase().trim();
+        return matchLink || matchTitle;
+      });
+      return !alreadyExists;
+    });
+
+    if (newRepos.length === 0) {
+      showToast("All your GitHub repositories are already added to your portfolio!", "info");
+      return;
+    }
+
+    if (!confirm(`Found ${newRepos.length} new GitHub repository(ies). Do you want to import all of them to your portfolio now?`)) {
+      return;
+    }
+
+    if (importAllGithubBtn) {
+      importAllGithubBtn.disabled = true;
+      importAllGithubBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> <span>Importing...</span>';
+    }
+
+    try {
+      const batch = db.batch();
+      let currentOrder = allProjects.length + 1;
+
+      newRepos.forEach((repo) => {
+        const docRef = db.collection("projects").doc();
+        const tags = [repo.language, ...(repo.topics || [])].filter(Boolean);
+        if (tags.length === 0) tags.push("GitHub");
+
+        let demoUrl = null;
+        if (repo.homepage) {
+          demoUrl = repo.homepage.startsWith("http") ? repo.homepage : `https://${repo.homepage}`;
+        }
+
+        batch.set(docRef, {
+          title: repo.name,
+          description: repo.description || "Open source project by Rezanur.",
+          tags: tags,
+          demo: demoUrl,
+          link: repo.html_url,
+          image: null,
+          pinned: false,
+          order: currentOrder++,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+      });
+
+      await batch.commit();
+      showToast(`Successfully imported ${newRepos.length} repository(ies) from GitHub!`, "success");
+      await loadProjects();
+      renderGithubRepos();
+    } catch (err) {
+      console.error("Error bulk importing GitHub repos:", err);
+      alert(`Error importing repositories: ${err.message}`);
+    } finally {
+      if (importAllGithubBtn) {
+        importAllGithubBtn.disabled = false;
+        importAllGithubBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-down"></i> <span>Import All New</span>';
+      }
+    }
+  }
 
   // Select and Edit GitHub repo before adding
   window.selectAndEditGithubRepo = function (repoName) {
