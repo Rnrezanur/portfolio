@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | Rezanur Portfolio</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E%F0%9F%9B%A1%EF%B8%8F%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg: #191919;
+      --panel: #202020;
+      --panel-soft: #282828;
+      --line: rgba(255, 255, 255, 0.12);
+      --text: #f3f3f3;
+      --muted: #9d9da5;
+      --accent: #2ce98a;
+      --accent-soft: rgba(44, 233, 138, 0.12);
+      --accent-hover: #26cf7a;
+      --danger: #ef4444;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+    }
+    .font-mono-code {
+      font-family: 'Space Mono', monospace;
+    }
+    .font-syne {
+      font-family: 'Syne', sans-serif;
+    }
+    .panel {
+      background-color: var(--panel);
+      border: 1px solid var(--line);
+    }
+    .panel-soft {
+      background-color: var(--panel-soft);
+      border: 1px solid var(--line);
+    }
+    .accent-btn {
+      background-color: var(--accent);
+      color: #0d0d0d;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .accent-btn:hover {
+      background-color: var(--accent-hover);
+      box-shadow: 0 0 16px rgba(44, 233, 138, 0.4);
+    }
+    .ghost-btn {
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--line);
+      color: var(--text);
+      transition: all 0.2s ease;
+    }
+    .ghost-btn:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+    .input-field {
+      background-color: #161616;
+      border: 1px solid var(--line);
+      color: var(--text);
+      transition: border-color 0.2s ease;
+    }
+    .input-field:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent);
+      background-color: var(--accent-soft);
+    }
+  </style>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm pointer-events-none"></div>
+
+  <!-- Auth Loading Splash -->
+  <div id="authLoading" class="fixed inset-0 bg-[#161616] flex flex-col items-center justify-center z-50 gap-4">
+    <div class="w-12 h-12 border-4 border-[rgba(255,255,255,0.1)] border-t-[#2ce98a] rounded-full animate-spin"></div>
+    <p class="font-mono-code text-sm text-[#9d9da5]">Connecting to Firebase...</p>
+  </div>
+
+  <!-- LOGIN SECTION (Shown when logged out) -->
+  <div id="loginSection" class="hidden min-h-screen flex items-center justify-center p-4">
+    <div class="panel max-w-md w-full rounded-2xl p-8 relative overflow-hidden shadow-2xl">
+      <div class="absolute -top-24 -right-24 w-48 h-48 bg-[#2ce98a]/10 rounded-full blur-3xl pointer-events-none"></div>
+      
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-10 h-10 rounded-xl bg-[#2ce98a]/10 border border-[#2ce98a]/30 flex items-center justify-center text-[#2ce98a]">
+          <i class="fa-solid fa-shield-halved text-lg"></i>
+        </div>
+        <div>
+          <h1 class="font-syne text-2xl font-bold tracking-tight">Portfolio Admin</h1>
+          <p class="text-xs text-[#9d9da5] font-mono-code">Authentication Portal</p>
+        </div>
+      </div>
+
+      <div id="authAlert" class="hidden mb-4 p-3 rounded-lg text-xs font-mono-code border"></div>
+
+      <form id="authForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Email Address</label>
+          <div class="relative">
+            <i class="fa-solid fa-envelope absolute left-3 top-1/2 -translate-y-1/2 text-[#9d9da5] text-xs"></i>
+            <input type="email" id="authEmail" required placeholder="admin@example.com" class="input-field w-full pl-9 pr-3 py-2.5 rounded-lg text-sm" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Password</label>
+          <div class="relative">
+            <i class="fa-solid fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-[#9d9da5] text-xs"></i>
+            <input type="password" id="authPassword" required placeholder="••••••••" class="input-field w-full pl-9 pr-3 py-2.5 rounded-lg text-sm" />
+          </div>
+        </div>
+
+        <button type="submit" id="authSubmitBtn" class="accent-btn w-full py-2.5 rounded-lg text-sm mt-2 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-right-to-bracket"></i>
+          <span id="authSubmitText">Sign In to Dashboard</span>
+        </button>
+      </form>
+
+      <div class="mt-6 pt-4 border-t border-[rgba(255,255,255,0.08)] flex items-center justify-between text-xs">
+        <button id="toggleAuthModeBtn" class="text-[#2ce98a] hover:underline font-mono-code">
+          First time? Create Admin Account
+        </button>
+        <button id="forgotPasswordBtn" class="text-[#9d9da5] hover:text-white font-mono-code">
+          Reset password
+        </button>
+      </div>
+
+      <div class="mt-4 text-center">
+        <a href="index.html" class="text-xs text-[#9d9da5] hover:text-[#2ce98a] inline-flex items-center gap-1">
+          <i class="fa-solid fa-arrow-left"></i> Back to Portfolio
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD SECTION (Shown when logged in) -->
+  <div id="dashboardSection" class="hidden flex-1 flex flex-col">
+    <!-- Header -->
+    <header class="panel border-b border-[var(--line)] sticky top-0 z-30 px-4 md:px-8 py-3.5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-[#2ce98a]/15 border border-[#2ce98a]/30 flex items-center justify-center text-[#2ce98a]">
+          <i class="fa-solid fa-code text-sm"></i>
+        </div>
+        <div>
+          <h2 class="font-syne font-bold text-base leading-tight">Rezanur Portfolio</h2>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-[#2ce98a] animate-pulse"></span>
+            <span class="text-[11px] font-mono-code text-[#2ce98a]">Live Firestore Connected</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="index.html" target="_blank" class="ghost-btn px-3 py-1.5 rounded-lg text-xs font-mono-code flex items-center gap-1.5">
+          <span>View Site</span>
+          <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+        </a>
+        <div class="hidden sm:block text-xs text-[#9d9da5] font-mono-code border-l border-[var(--line)] pl-3" id="userEmailBadge"></div>
+        <button id="logoutBtn" class="ghost-btn hover:border-red-500/50 hover:text-red-400 px-3 py-1.5 rounded-lg text-xs font-mono-code flex items-center gap-1.5">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span class="hidden sm:inline">Logout</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="border-b border-[var(--line)] bg-[#1c1c1c] px-4 md:px-8">
+      <nav class="flex gap-2 overflow-x-auto py-2">
+        <button data-tab="projects" class="tab-btn active px-4 py-2 rounded-lg text-xs font-mono-code transition-all flex items-center gap-2">
+          <i class="fa-solid fa-layer-group"></i> Projects
+        </button>
+        <button data-tab="education" class="tab-btn px-4 py-2 rounded-lg text-xs font-mono-code transition-all flex items-center gap-2 text-[#9d9da5] hover:text-white">
+          <i class="fa-solid fa-graduation-cap"></i> Education
+        </button>
+        <button data-tab="experience" class="tab-btn px-4 py-2 rounded-lg text-xs font-mono-code transition-all flex items-center gap-2 text-[#9d9da5] hover:text-white">
+          <i class="fa-solid fa-briefcase"></i> Experience
+        </button>
+        <button data-tab="skills" class="tab-btn px-4 py-2 rounded-lg text-xs font-mono-code transition-all flex items-center gap-2 text-[#9d9da5] hover:text-white">
+          <i class="fa-solid fa-shapes"></i> Skills
+        </button>
+        <button data-tab="profile" class="tab-btn px-4 py-2 rounded-lg text-xs font-mono-code transition-all flex items-center gap-2 text-[#9d9da5] hover:text-white">
+          <i class="fa-solid fa-user-gear"></i> Quick Info &amp; CV
+        </button>
+      </nav>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full">
+
+      <!-- ================= TAB: PROJECTS ================= -->
+      <section id="tab-projects" class="tab-content space-y-6">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h3 class="font-syne text-xl font-bold">Manage Projects</h3>
+            <p class="text-xs font-mono-code text-[#9d9da5]">Add, edit, or remove featured and portfolio projects.</p>
+          </div>
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <button id="importDefaultsBtn" class="ghost-btn px-3 py-2 rounded-lg text-xs font-mono-code flex items-center gap-1.5" title="Re-sync default projects into Firestore">
+              <i class="fa-solid fa-rotate text-[#2ce98a]"></i>
+              <span>Re-sync Defaults</span>
+            </button>
+            <button id="openAddProjectModalBtn" class="accent-btn px-4 py-2 rounded-lg text-xs font-mono-code flex items-center gap-1.5 ml-auto sm:ml-0">
+              <i class="fa-solid fa-plus"></i>
+              <span>Add Project</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter / Search -->
+        <div class="flex items-center gap-3">
+          <div class="relative flex-1 max-w-sm">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-xs text-[#9d9da5]"></i>
+            <input type="text" id="projectSearchInput" placeholder="Search projects by title or tag..." class="input-field w-full pl-9 pr-3 py-2 rounded-lg text-xs" />
+          </div>
+          <select id="projectFilterPinned" class="input-field px-3 py-2 rounded-lg text-xs font-mono-code">
+            <option value="all">All Projects</option>
+            <option value="pinned">Featured Only</option>
+            <option value="unpinned">Standard Only</option>
+          </select>
+        </div>
+
+        <!-- Projects Grid -->
+        <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+        <!-- Empty State -->
+        <div id="projectsEmptyState" class="hidden panel rounded-2xl p-12 text-center space-y-4">
+          <div class="w-16 h-16 mx-auto rounded-2xl bg-[#2ce98a]/10 border border-[#2ce98a]/30 flex items-center justify-center text-[#2ce98a] text-2xl">
+            <i class="fa-solid fa-folder-open"></i>
+          </div>
+          <h4 class="font-syne text-lg font-bold">No Projects Found</h4>
+          <p class="text-xs text-[#9d9da5] max-w-md mx-auto">Click "Add Project" to create your first portfolio piece.</p>
+        </div>
+      </section>
+
+      <!-- ================= TAB: EDUCATION ================= -->
+      <section id="tab-education" class="tab-content hidden space-y-6">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h3 class="font-syne text-xl font-bold">Education History</h3>
+            <p class="text-xs font-mono-code text-[#9d9da5]">Manage your degrees, institutions, and academic milestones.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="importEducationDefaultsBtn" class="ghost-btn px-3 py-2 rounded-lg text-xs font-mono-code flex items-center gap-1.5">
+              <i class="fa-solid fa-rotate text-[#2ce98a]"></i>
+              <span>Re-sync Defaults</span>
+            </button>
+            <button id="openAddEducationModalBtn" class="accent-btn px-4 py-2 rounded-lg text-xs font-mono-code flex items-center gap-1.5">
+              <i class="fa-solid fa-plus"></i>
+              <span>Add Education</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="educationGrid" class="space-y-4">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+      <!-- ================= TAB: EXPERIENCE ================= -->
+      <section id="tab-experience" class="tab-content hidden space-y-6">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h3 class="font-syne text-xl font-bold">Work Experience</h3>
+            <p class="text-xs font-mono-code text-[#9d9da5]">Manage your roles, company history, and key achievements.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="importExperienceDefaultsBtn" class="ghost-btn px-3 py-2 rounded-lg text-xs font-mono-code flex items-center gap-1.5">
+              <i class="fa-solid fa-rotate text-[#2ce98a]"></i>
+              <span>Re-sync Defaults</span>
+            </button>
+            <button id="openAddExperienceBtn" class="accent-btn px-4 py-2 rounded-lg text-xs font-mono-code flex items-center gap-1.5">
+              <i class="fa-solid fa-plus"></i>
+              <span>Add Experience</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="experienceList" class="space-y-4">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+      <!-- ================= TAB: SKILLS ================= -->
+      <section id="tab-skills" class="tab-content hidden space-y-6">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h3 class="font-syne text-xl font-bold">Skills Management</h3>
+            <p class="text-xs font-mono-code text-[#9d9da5]">Add or remove technologies displayed on your portfolio.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="importSkillsDefaultsBtn" class="ghost-btn px-3 py-2 rounded-lg text-xs font-mono-code flex items-center gap-1.5">
+              <i class="fa-solid fa-rotate text-[#2ce98a]"></i>
+              <span>Re-sync Defaults</span>
+            </button>
+            <button id="openAddSkillModalBtn" class="accent-btn px-4 py-2 rounded-lg text-xs font-mono-code flex items-center gap-1.5">
+              <i class="fa-solid fa-plus"></i>
+              <span>Add Skill</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="skillsContainer" class="space-y-6">
+          <!-- Dynamically categorized skills -->
+        </div>
+      </section>
+
+      <!-- ================= TAB: QUICK INFO & CV ================= -->
+      <section id="tab-profile" class="tab-content hidden space-y-6 max-w-3xl">
+        <div>
+          <h3 class="font-syne text-xl font-bold">Quick Portfolio Info &amp; CV Upload</h3>
+          <p class="text-xs font-mono-code text-[#9d9da5]">Update your CV / Resume file and portfolio details.</p>
+        </div>
+
+        <form id="quickInfoForm" class="panel rounded-xl p-6 sm:p-8 space-y-6">
+
+          <!-- CV Upload Card -->
+          <div class="panel-soft rounded-xl p-5 border border-[var(--line)] space-y-4">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <div class="flex items-center gap-2 text-[#2ce98a]">
+                <i class="fa-solid fa-file-pdf text-lg"></i>
+                <h4 class="font-syne font-bold text-sm text-white">Curriculum Vitae (CV / Resume)</h4>
+              </div>
+              <span id="cvCurrentStatus" class="text-[11px] font-mono-code text-[#9d9da5]">Default: assets/Md_Rezanur_Bin_Shamim_CV.pdf</span>
+            </div>
+
+            <div class="space-y-2">
+              <label class="block text-xs font-mono-code text-[#9d9da5]">Choose New PDF file to Upload:</label>
+              <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                <input type="file" id="cvFileInput" accept=".pdf" class="text-xs file:bg-[#2ce98a]/15 file:text-[#2ce98a] file:border file:border-[#2ce98a]/30 file:rounded-lg file:px-3 file:py-2 file:font-mono-code file:cursor-pointer hover:file:bg-[#2ce98a]/25 text-[#9d9da5] w-full sm:w-auto" />
+                <span id="cvFileSize" class="text-xs font-mono-code text-[#2ce98a]"></span>
+              </div>
+              <p class="text-[10px] text-[#9d9da5] font-mono-code">Uploaded PDF is stored directly in your cloud database and automatically linked to the "Download CV" button.</p>
+            </div>
+
+            <div id="cvPreviewRow" class="hidden flex items-center gap-3 pt-3 border-t border-[var(--line)]">
+              <a id="cvPreviewLink" href="#" target="_blank" class="ghost-btn px-3 py-1.5 rounded-lg text-xs font-mono-code flex items-center gap-1.5 text-[#2ce98a]">
+                <i class="fa-solid fa-eye"></i> View Current Uploaded CV
+              </a>
+              <button type="button" id="resetCvBtn" class="text-[11px] text-[#9d9da5] hover:text-red-400 font-mono-code">
+                Reset to default CV file
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Status Badge Text</label>
+            <input type="text" id="infoStatus" placeholder="Available for new opportunities" class="input-field w-full px-3 py-2 rounded-lg text-xs" />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Primary Role</label>
+              <input type="text" id="infoRole" placeholder="Full Stack Developer" class="input-field w-full px-3 py-2 rounded-lg text-xs" />
+            </div>
+            <div>
+              <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Contact Email</label>
+              <input type="email" id="infoEmail" placeholder="rezanurbinshamim@gmail.com" class="input-field w-full px-3 py-2 rounded-lg text-xs" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">External Resume / Cloud Link (Optional alternative to PDF file)</label>
+            <input type="url" id="infoResume" placeholder="https://drive.google.com/..." class="input-field w-full px-3 py-2 rounded-lg text-xs" />
+          </div>
+
+          <button type="submit" id="saveQuickInfoBtn" class="accent-btn px-5 py-2.5 rounded-lg text-xs font-mono-code flex items-center gap-2">
+            <i class="fa-solid fa-check"></i>
+            <span>Save Quick Info &amp; CV</span>
+          </button>
+        </form>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ================= ADD / EDIT PROJECT MODAL ================= -->
+  <div id="projectModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="panel max-w-xl w-full rounded-2xl p-6 sm:p-8 space-y-5 my-8">
+      <div class="flex items-center justify-between border-b border-[var(--line)] pb-4">
+        <h3 id="modalTitle" class="font-syne text-lg font-bold">Add New Project</h3>
+        <button id="closeProjectModalBtn" class="text-[#9d9da5] hover:text-white text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="projectForm" class="space-y-4">
+        <input type="hidden" id="projectId" />
+
+        <div>
+          <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Project Title *</label>
+          <input type="text" id="projectTitle" required placeholder="e.g. IntelliEco Management Platform" class="input-field w-full px-3 py-2.5 rounded-lg text-xs" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Description *</label>
+          <textarea id="projectDescription" required rows="3" placeholder="Brief summary of what the project does..." class="input-field w-full px-3 py-2 rounded-lg text-xs"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Tech Stack Tags (comma-separated) *</label>
+          <input type="text" id="projectTags" required placeholder="React, Node.js, Tailwind, MongoDB" class="input-field w-full px-3 py-2 rounded-lg text-xs" />
+          <p class="text-[10px] text-[#9d9da5] mt-1 font-mono-code">Separate each tag with a comma.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Live Demo URL</label>
+            <input type="url" id="projectDemo" placeholder="https://my-app.vercel.app" class="input-field w-full px-3 py-2 rounded-lg text-xs" />
+          </div>
+          <div>
+            <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">GitHub Repository URL</label>
+            <input type="url" id="projectLink" placeholder="https://github.com/..." class="input-field w-full px-3 py-2 rounded-lg text-xs" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Screenshot / Image</label>
+          <div class="space-y-2">
+            <input type="text" id="projectImage" placeholder="Image URL (e.g. https://... or leave empty)" class="input-field w-full px-3 py-2 rounded-lg text-xs" />
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-mono-code text-[#9d9da5]">Or upload local screenshot:</span>
+              <input type="file" id="projectImageFile" accept="image/*" class="text-xs file:bg-white/10 file:border-0 file:rounded file:px-2 file:py-1 file:text-xs file:text-white file:cursor-pointer" />
+            </div>
+            <div id="imagePreviewContainer" class="hidden">
+              <img id="imagePreview" src="" alt="Preview" class="h-24 rounded border border-[var(--line)] object-cover" />
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="projectPinned" class="rounded border-[#9d9da5] text-[#2ce98a] focus:ring-0" />
+            <span class="text-xs font-mono-code">Pin to <strong>Featured Work</strong></span>
+          </label>
+
+          <div class="flex items-center gap-2">
+            <label class="text-xs font-mono-code text-[#9d9da5]">Order:</label>
+            <input type="number" id="projectOrder" value="0" class="input-field w-16 px-2 py-1 rounded text-xs text-center" />
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-4 border-t border-[var(--line)]">
+          <button type="button" id="cancelProjectModalBtn" class="ghost-btn px-4 py-2 rounded-lg text-xs font-mono-code">Cancel</button>
+          <button type="submit" id="saveProjectBtn" class="accent-btn px-5 py-2 rounded-lg text-xs font-mono-code flex items-center gap-1.5">
+            <i class="fa-solid fa-floppy-disk"></i>
+            <span>Save Project</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= ADD / EDIT EDUCATION MODAL ================= -->
+  <div id="educationModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="panel max-w-md w-full rounded-2xl p-6 sm:p-8 space-y-4 my-8">
+      <div class="flex items-center justify-between border-b border-[var(--line)] pb-3">
+        <h3 id="educationModalTitle" class="font-syne text-lg font-bold">Add Education</h3>
+        <button id="closeEducationModalBtn" class="text-[#9d9da5] hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="educationForm" class="space-y-4">
+        <input type="hidden" id="educationId" />
+
+        <div>
+          <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Institution Name *</label>
+          <input type="text" id="educationRole" required placeholder="e.g. Green University of Bangladesh" class="input-field w-full px-3 py-2 rounded-lg text-xs" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Degree / Field of Study *</label>
+          <input type="text" id="educationMeta" required placeholder="e.g. BSc in Computer Science and Engineering" class="input-field w-full px-3 py-2 rounded-lg text-xs" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Period / Years *</label>
+            <input type="text" id="educationPeriod" required placeholder="e.g. Feb 2022 - Running" class="input-field w-full px-3 py-2 rounded-lg text-xs" />
+          </div>
+          <div>
+            <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Result / Note</label>
+            <input type="text" id="educationNote" placeholder="e.g. Ongoing or GPA 5.00" class="input-field w-full px-3 py-2 rounded-lg text-xs" />
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="educationActive" class="rounded border-[#9d9da5] text-[#2ce98a] focus:ring-0" />
+            <span class="text-xs font-mono-code">Current / Ongoing (Glowing dot)</span>
+          </label>
+
+          <div class="flex items-center gap-2">
+            <label class="text-xs font-mono-code text-[#9d9da5]">Order:</label>
+            <input type="number" id="educationOrder" value="1" class="input-field w-16 px-2 py-1 rounded text-xs text-center" />
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-3 border-t border-[var(--line)]">
+          <button type="button" id="cancelEducationModalBtn" class="ghost-btn px-4 py-2 rounded-lg text-xs font-mono-code">Cancel</button>
+          <button type="submit" class="accent-btn px-5 py-2 rounded-lg text-xs font-mono-code">Save Education</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= ADD / EDIT EXPERIENCE MODAL ================= -->
+  <div id="experienceModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="panel max-w-lg w-full rounded-2xl p-6 sm:p-8 space-y-4 my-8">
+      <div class="flex items-center justify-between border-b border-[var(--line)] pb-3">
+        <h3 id="experienceModalTitle" class="font-syne text-lg font-bold">Add Work Experience</h3>
+        <button id="closeExperienceModalBtn" class="text-[#9d9da5] hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="experienceForm" class="space-y-4">
+        <input type="hidden" id="experienceId" />
+
+        <div>
+          <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Job Role / Title *</label>
+          <input type="text" id="expRole" required placeholder="e.g. Junior Backend Engineer Intern" class="input-field w-full px-3 py-2 rounded-lg text-xs" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Company / Organization *</label>
+            <input type="text" id="expCompany" required placeholder="e.g. 9 AM Solution" class="input-field w-full px-3 py-2 rounded-lg text-xs" />
+          </div>
+          <div>
+            <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Period / Dates *</label>
+            <input type="text" id="expPeriod" required placeholder="e.g. Feb 2026 - Present" class="input-field w-full px-3 py-2 rounded-lg text-xs" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Company / Project Link</label>
+          <input type="url" id="expLink" placeholder="https://..." class="input-field w-full px-3 py-2 rounded-lg text-xs" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Key Responsibilities (one per line) *</label>
+          <textarea id="expPoints" required rows="4" placeholder="Assisted in backend development tasks&#10;Worked with databases and server-side logic&#10;Collaborated with development team" class="input-field w-full px-3 py-2 rounded-lg text-xs"></textarea>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="expActive" class="rounded border-[#9d9da5] text-[#2ce98a] focus:ring-0" />
+            <span class="text-xs font-mono-code">Current Role (Glowing dot)</span>
+          </label>
+
+          <div class="flex items-center gap-2">
+            <label class="text-xs font-mono-code text-[#9d9da5]">Order:</label>
+            <input type="number" id="expOrder" value="1" class="input-field w-16 px-2 py-1 rounded text-xs text-center" />
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-3 border-t border-[var(--line)]">
+          <button type="button" id="cancelExperienceModalBtn" class="ghost-btn px-4 py-2 rounded-lg text-xs font-mono-code">Cancel</button>
+          <button type="submit" class="accent-btn px-5 py-2 rounded-lg text-xs font-mono-code">Save Experience</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= ADD SKILL MODAL ================= -->
+  <div id="skillModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="panel max-w-md w-full rounded-2xl p-6 space-y-4">
+      <div class="flex items-center justify-between border-b border-[var(--line)] pb-3">
+        <h3 class="font-syne text-base font-bold">Add New Skill</h3>
+        <button id="closeSkillModalBtn" class="text-[#9d9da5] hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="skillForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Category</label>
+          <select id="skillCategory" required class="input-field w-full px-3 py-2 rounded-lg text-xs font-mono-code">
+            <option value="Languages">Languages</option>
+            <option value="Frontend">Frontend</option>
+            <option value="Backend">Backend</option>
+            <option value="Databases">Databases</option>
+            <option value="Tools">Tools &amp; Platforms</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Skill Name</label>
+          <input type="text" id="skillName" required placeholder="e.g. React, Docker, Python" class="input-field w-full px-3 py-2 rounded-lg text-xs" />
+        </div>
+        <div>
+          <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">FontAwesome Icon Class (optional)</label>
+          <input type="text" id="skillIcon" placeholder="e.g. fa-brands fa-react or fa-solid fa-code" class="input-field w-full px-3 py-2 rounded-lg text-xs" />
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" id="cancelSkillModalBtn" class="ghost-btn px-4 py-2 rounded-lg text-xs font-mono-code">Cancel</button>
+          <button type="submit" class="accent-btn px-5 py-2 rounded-lg text-xs font-mono-code">Save Skill</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Application Logic -->
+  <script src="admin.js"></script>
+</body>
+</html>

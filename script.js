@@ -265,7 +265,7 @@ sideMenuLinks.forEach((link) => {
   link.addEventListener("click", () => toggleMenu(false));
 });
 
-const projects = [
+let projects = [
   {
     title: "IntelliEco Smart Eco-System Management Platform",
     description: "A web app concept for monitoring and managing eco-friendly systems with smart data tracking.",
@@ -347,6 +347,7 @@ function createActionButton(label, href, type) {
 function createCard(project) {
   return `
     <article class="project-card scroll-sequence-item">
+      ${project.image ? `<div class="project-card-image"><img src="${project.image}" alt="${project.title}" loading="lazy" /></div>` : ""}
       <div class="project-tags">
         ${renderTags(project.tags)}
       </div>
@@ -496,3 +497,187 @@ seeMoreBtn?.addEventListener("click", () => {
 
 displayFeatured();
 displayProjects();
+
+// Dynamic Firebase Firestore Integration (with offline fallback)
+async function initDynamicPortfolio() {
+  if (typeof db === "undefined" || !db) {
+    return;
+  }
+
+  // 1. Fetch Projects from Firestore
+  try {
+    const projectsSnapshot = await db.collection("projects").get();
+    if (!projectsSnapshot.empty) {
+      const remoteProjects = [];
+      projectsSnapshot.forEach((doc) => {
+        remoteProjects.push({ id: doc.id, ...doc.data() });
+      });
+      // Sort by order ascending
+      remoteProjects.sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
+      projects = remoteProjects;
+      featuredPage = 1;
+      currentPage = 1;
+      displayFeatured();
+      displayProjects();
+    }
+  } catch (err) {
+    console.warn("Firestore projects unavailable, using static fallback:", err);
+  }
+
+  // 2. Fetch Skills from Firestore
+  try {
+    const skillsSnapshot = await db.collection("skills").get();
+    if (!skillsSnapshot.empty) {
+      const skillsContainer = document.querySelector(".skills-groups");
+      if (skillsContainer) {
+        const categories = ["Languages", "Frontend", "Backend", "Databases", "Tools"];
+        const grouped = {};
+        categories.forEach((c) => (grouped[c] = []));
+
+        skillsSnapshot.forEach((doc) => {
+          const item = doc.data();
+          const cat = item.category || "Tools";
+          if (!grouped[cat]) grouped[cat] = [];
+          grouped[cat].push(item);
+        });
+
+        let html = "";
+        for (const [cat, items] of Object.entries(grouped)) {
+          if (items.length === 0) continue;
+          const badges = items
+            .map(
+              (s) =>
+                `<span class="skill-badge"><i class="${s.icon || "fa-solid fa-code"}"></i>${s.name}</span>`
+            )
+            .join("");
+          html += `
+            <div class="skills-group">
+              <h3 class="skills-group-title">${cat}</h3>
+              <div class="skills-badges">
+                ${badges}
+              </div>
+            </div>
+          `;
+        }
+        if (html) {
+          skillsContainer.innerHTML = html;
+        }
+      }
+    }
+  } catch (err) {
+    console.warn("Firestore skills unavailable, using static fallback:", err);
+  }
+
+  // 3. Fetch Education from Firestore
+  try {
+    const eduSnapshot = await db.collection("education").get();
+    if (!eduSnapshot.empty) {
+      const eduContainer = document.getElementById("education-timeline");
+      if (eduContainer) {
+        const eduList = [];
+        eduSnapshot.forEach((doc) => {
+          eduList.push({ id: doc.id, ...doc.data() });
+        });
+        eduList.sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
+
+        eduContainer.innerHTML = eduList
+          .map(
+            (edu) => `
+            <div class="timeline-block">
+              <div class="timeline-dot ${edu.isActive ? "is-active" : ""}"></div>
+              <div class="timeline-content">
+                <p class="timeline-period">${edu.period || ""}</p>
+                <div class="timeline-entry">
+                  <h3 class="timeline-role">${edu.role || ""}</h3>
+                  <p class="timeline-meta">${edu.meta || ""}</p>
+                  ${edu.note ? `<p class="timeline-note">${edu.note}</p>` : ""}
+                </div>
+              </div>
+            </div>
+          `
+          )
+          .join("");
+      }
+    }
+  } catch (err) {
+    console.warn("Firestore education unavailable, using static fallback:", err);
+  }
+
+  // 4. Fetch Experience from Firestore
+  try {
+    const expSnapshot = await db.collection("experience").get();
+    if (!expSnapshot.empty) {
+      const expContainer = document.getElementById("experience-timeline");
+      if (expContainer) {
+        const expList = [];
+        expSnapshot.forEach((doc) => {
+          expList.push({ id: doc.id, ...doc.data() });
+        });
+        expList.sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
+
+        expContainer.innerHTML = expList
+          .map(
+            (exp) => `
+            <div class="timeline-block">
+              <div class="timeline-dot ${exp.isActive ? "is-active" : ""}"></div>
+              <div class="timeline-content">
+                <p class="timeline-period">${exp.period || ""}</p>
+                <div class="timeline-entry">
+                  <h3 class="timeline-role">${exp.role || ""}</h3>
+                  <p class="timeline-meta">
+                    ${
+                      exp.link
+                        ? `<a href="${exp.link}" target="_blank" rel="noopener noreferrer">${exp.company}</a>`
+                        : exp.company || ""
+                    }
+                  </p>
+                  ${
+                    exp.points && exp.points.length
+                      ? `<ul class="timeline-points">${exp.points.map((pt) => `<li>${pt}</li>`).join("")}</ul>`
+                      : ""
+                  }
+                </div>
+              </div>
+            </div>
+          `
+          )
+          .join("");
+      }
+    }
+  } catch (err) {
+    console.warn("Firestore experience unavailable, using static fallback:", err);
+  }
+
+  // 5. Fetch Quick Info & CV from Firestore
+  try {
+    const profileDoc = await db.collection("settings").doc("profile").get();
+    if (profileDoc.exists) {
+      const data = profileDoc.data();
+      if (data.email) {
+        document.querySelectorAll('a[href^="mailto:"]').forEach((el) => {
+          el.setAttribute("href", `mailto:${data.email}`);
+        });
+        document.querySelectorAll(".profile-email").forEach((el) => {
+          el.textContent = data.email;
+        });
+      }
+      if (data.cvDataUrl) {
+        const downloadCvBtn = document.getElementById("downloadCvBtn");
+        if (downloadCvBtn) {
+          downloadCvBtn.setAttribute("href", data.cvDataUrl);
+          downloadCvBtn.setAttribute("download", data.cvFileName || "Md_Rezanur_Bin_Shamim_CV.pdf");
+        }
+      } else if (data.resume) {
+        const downloadCvBtn = document.getElementById("downloadCvBtn");
+        if (downloadCvBtn) {
+          downloadCvBtn.setAttribute("href", data.resume);
+        }
+      }
+    }
+  } catch (err) {
+    console.warn("Firestore settings unavailable, using static fallback:", err);
+  }
+}
+
+// Initialize dynamic data once DOM is ready
+window.addEventListener("DOMContentLoaded", initDynamicPortfolio);

@@ -15,6 +15,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link rel="stylesheet" href="style.css">
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
     <script src="script.js" defer></script>
 </head>
 
@@ -49,6 +54,7 @@
                 <a href="#achievements" class="side-menu-link"><i
                         class="fa-solid fa-award"></i><span>Achievements &amp; Certifications</span></a>
                 <a href="#contact" class="side-menu-link"><i class="fa-solid fa-envelope"></i><span>Contact</span></a>
+                <a href="admin.html" class="side-menu-link" style="opacity: 0.7;"><i class="fa-solid fa-lock"></i><span>Admin</span></a>
             </nav>
 
             <div class="side-menu-social">
@@ -131,9 +137,9 @@
                             Clean interfaces, practical backend logic, and thoughtful digital experiences.
                         </p>
                         <div class="hero-actions">
-                            <a href="assets/Md_Rezanur_Bin_Shamim_CV.pdf" class="ghost-btn hero-btn" download>
+                            <a href="assets/Md_Rezanur_Bin_Shamim_CV.pdf" id="downloadCvBtn" class="ghost-btn hero-btn" download>
                                 <i class="fa-solid fa-download"></i>
-                                <span>Download CV</span>
+                                <span id="cvBtnText">Download CV</span>
                             </a>
                             <a href="#projects" class="ghost-btn hero-btn">
                                 <i class="fa-solid fa-arrow-up-right-from-square"></i>
@@ -218,7 +224,7 @@
                 <h2 class="education-title">EXPERIENCE</h2>
                 <div class="education-divider"></div>
 
-                <div class="timeline-resume">
+                <div class="timeline-resume" id="experience-timeline">
                     <div class="timeline-block">
                         <div class="timeline-dot is-active"></div>
                         <div class="timeline-content">
@@ -285,7 +291,7 @@
                 <h2 class="education-title">EDUCATION</h2>
                 <div class="education-divider"></div>
 
-                <div class="timeline-resume">
+                <div class="timeline-resume" id="education-timeline">
                     <div class="timeline-block">
                         <div class="timeline-dot is-active"></div>
                         <div class="timeline-content">
