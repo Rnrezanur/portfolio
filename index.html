@@ -454,15 +454,26 @@
                 <div id="featured-section" class="portfolio-block">
                     <div class="portfolio-head">
                         <h3 class="portfolio-subtitle">Featured Work</h3>
-                        <button id="seeMoreBtn" class="ghost-btn hidden">Explore Featured</button>
+                        <button id="seeMoreBtn" class="explore-featured-btn hidden">
+                            <span>Explore Featured</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
                     </div>
 
                     <div id="featured-container" class="project-grid"></div>
 
                     <div id="featuredPagination" class="pagination-row hidden">
-                        <button id="featuredPrev" class="ghost-btn small-btn">Prev</button>
-                        <span id="featuredPageNumber" class="page-indicator"></span>
-                        <button id="featuredNext" class="ghost-btn small-btn">Next</button>
+                        <button id="featuredPrev" class="pagination-btn prev-btn">
+                            <i class="fa-solid fa-arrow-left"></i>
+                            <span>Prev</span>
+                        </button>
+                        <div class="page-indicator-badge">
+                            <span id="featuredPageNumber" class="page-indicator">Page 1 of 2</span>
+                        </div>
+                        <button id="featuredNext" class="pagination-btn next-btn">
+                            <span>Next</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
                     </div>
                 </div>
 
@@ -471,9 +482,17 @@
                     <div id="project-container" class="project-grid"></div>
 
                     <div class="pagination-row">
-                        <button id="prevBtn" class="ghost-btn small-btn">Prev</button>
-                        <span id="pageNumber" class="page-indicator"></span>
-                        <button id="nextBtn" class="ghost-btn small-btn">Next</button>
+                        <button id="prevBtn" class="pagination-btn prev-btn">
+                            <i class="fa-solid fa-arrow-left"></i>
+                            <span>Prev</span>
+                        </button>
+                        <div class="page-indicator-badge">
+                            <span id="pageNumber" class="page-indicator">Page 1 of 3</span>
+                        </div>
+                        <button id="nextBtn" class="pagination-btn next-btn">
+                            <span>Next</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
                     </div>
                 </div>
             </section>

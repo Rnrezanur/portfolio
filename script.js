@@ -499,7 +499,11 @@ function displayFeatured() {
   }
 
   prepareScrollSequences(featuredContainer.parentElement ?? document);
-  seeMoreBtn.textContent = showAllFeatured ? "Collapse Featured" : "Explore Featured";
+  if (seeMoreBtn) {
+    seeMoreBtn.innerHTML = showAllFeatured
+      ? '<span>Collapse Featured</span> <i class="fa-solid fa-chevron-up"></i>'
+      : '<span>Explore Featured</span> <i class="fa-solid fa-arrow-right"></i>';
+  }
 }
 
 function displayProjects() {
