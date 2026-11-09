@@ -395,8 +395,16 @@
       }
 
       allProjects = [];
+      const seenTitles = new Set();
       snapshot.forEach((doc) => {
-        allProjects.push({ id: doc.id, ...doc.data() });
+        const data = doc.data();
+        const normTitle = (data.title || "").toLowerCase().trim();
+        // Prevent duplicate cards from rendering if DB has duplicates
+        if (normTitle && seenTitles.has(normTitle)) {
+          return;
+        }
+        if (normTitle) seenTitles.add(normTitle);
+        allProjects.push({ id: doc.id, ...data });
       });
 
       allProjects.sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
@@ -409,8 +417,17 @@
 
   async function seedDefaultProjects(showToastAlert = true) {
     try {
+      // Deduplicate: Only add default projects that don't already exist in the database
+      const existingTitles = new Set(allProjects.map((p) => (p.title || "").toLowerCase().trim()));
+      const toAdd = defaultProjects.filter((p) => !existingTitles.has((p.title || "").toLowerCase().trim()));
+
+      if (toAdd.length === 0) {
+        if (showToastAlert) showToast("All default projects are already present!", "info");
+        return;
+      }
+
       const batch = db.batch();
-      defaultProjects.forEach((proj) => {
+      toAdd.forEach((proj) => {
         const docRef = db.collection("projects").doc();
         batch.set(docRef, {
           ...proj,
@@ -418,15 +435,9 @@
         });
       });
       await batch.commit();
-      if (showToastAlert) showToast("Default projects synced to Firestore!", "success");
+      if (showToastAlert) showToast(`Added ${toAdd.length} default project(s)!`, "success");
 
-      const snapshot = await db.collection("projects").get();
-      allProjects = [];
-      snapshot.forEach((doc) => {
-        allProjects.push({ id: doc.id, ...doc.data() });
-      });
-      allProjects.sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
-      renderProjects();
+      await loadProjects();
     } catch (err) {
       console.error("Error auto-seeding projects:", err);
     }
@@ -608,6 +619,17 @@
         await db.collection("projects").doc(id).update(data);
         showToast("Project updated successfully!", "success");
       } else {
+        // Prevent accidental duplicate project entry
+        const isDuplicate = allProjects.some(
+          (p) => (p.title || "").toLowerCase().trim() === data.title.toLowerCase().trim()
+        );
+        if (isDuplicate) {
+          alert(`A project with the title "${data.title}" already exists. Please choose a different title or edit the existing one.`);
+          submitBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> <span>Save Project</span>';
+          submitBtn.disabled = false;
+          return;
+        }
+
         data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
         await db.collection("projects").add(data);
         showToast("Project added to portfolio!", "success");
@@ -831,6 +853,18 @@
     const repo = githubRepos.find((r) => r.name === repoName);
     if (!repo) return;
 
+    // Check if repo is already added in portfolio
+    const alreadyExists = allProjects.some((p) => {
+      const matchLink = p.link && p.link.toLowerCase().trim() === repo.html_url.toLowerCase().trim();
+      const matchTitle = p.title && p.title.toLowerCase().trim() === repo.name.toLowerCase().trim();
+      return matchLink || matchTitle;
+    });
+
+    if (alreadyExists) {
+      showToast(`"${repo.name}" is already in your portfolio!`, "info");
+      return;
+    }
+
     const tags = [repo.language, ...(repo.topics || [])].filter(Boolean);
     if (tags.length === 0) tags.push("GitHub");
 
@@ -916,8 +950,20 @@
 
   async function seedDefaultEducation(showToastAlert = true) {
     try {
+      const existingKeys = new Set(
+        allEducation.map((e) => `${(e.role || "").toLowerCase()}_${(e.meta || "").toLowerCase()}`)
+      );
+      const toAdd = defaultEducation.filter(
+        (e) => !existingKeys.has(`${(e.role || "").toLowerCase()}_${(e.meta || "").toLowerCase()}`)
+      );
+
+      if (toAdd.length === 0) {
+        if (showToastAlert) showToast("All default education entries are already present!", "info");
+        return;
+      }
+
       const batch = db.batch();
-      defaultEducation.forEach((edu) => {
+      toAdd.forEach((edu) => {
         const docRef = db.collection("education").doc();
         batch.set(docRef, {
           ...edu,
@@ -925,15 +971,9 @@
         });
       });
       await batch.commit();
-      if (showToastAlert) showToast("Default education entries synced!", "success");
+      if (showToastAlert) showToast(`Added ${toAdd.length} default education entry!`, "success");
 
-      const snapshot = await db.collection("education").get();
-      allEducation = [];
-      snapshot.forEach((doc) => {
-        allEducation.push({ id: doc.id, ...doc.data() });
-      });
-      allEducation.sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
-      renderEducation();
+      await loadEducation();
     } catch (err) {
       console.error("Error seeding education:", err);
     }
@@ -1077,8 +1117,20 @@
 
   async function seedDefaultExperience(showToastAlert = true) {
     try {
+      const existingKeys = new Set(
+        allExperience.map((e) => `${(e.role || "").toLowerCase()}_${(e.company || "").toLowerCase()}`)
+      );
+      const toAdd = defaultExperience.filter(
+        (e) => !existingKeys.has(`${(e.role || "").toLowerCase()}_${(e.company || "").toLowerCase()}`)
+      );
+
+      if (toAdd.length === 0) {
+        if (showToastAlert) showToast("All default experience entries are already present!", "info");
+        return;
+      }
+
       const batch = db.batch();
-      defaultExperience.forEach((exp) => {
+      toAdd.forEach((exp) => {
         const docRef = db.collection("experience").doc();
         batch.set(docRef, {
           ...exp,
@@ -1086,15 +1138,9 @@
         });
       });
       await batch.commit();
-      if (showToastAlert) showToast("Default experience synced!", "success");
+      if (showToastAlert) showToast(`Added ${toAdd.length} default experience entry!`, "success");
 
-      const snapshot = await db.collection("experience").get();
-      allExperience = [];
-      snapshot.forEach((doc) => {
-        allExperience.push({ id: doc.id, ...doc.data() });
-      });
-      allExperience.sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
-      renderExperience();
+      await loadExperience();
     } catch (err) {
       console.error("Error seeding experience:", err);
     }
@@ -1250,8 +1296,20 @@
 
   async function seedDefaultSkills(showToastAlert = true) {
     try {
+      const existingKeys = new Set(
+        allSkills.map((s) => `${(s.name || "").toLowerCase()}_${(s.category || "").toLowerCase()}`)
+      );
+      const toAdd = defaultSkills.filter(
+        (s) => !existingKeys.has(`${(s.name || "").toLowerCase()}_${(s.category || "").toLowerCase()}`)
+      );
+
+      if (toAdd.length === 0) {
+        if (showToastAlert) showToast("All default skills are already present!", "info");
+        return;
+      }
+
       const batch = db.batch();
-      defaultSkills.forEach((s) => {
+      toAdd.forEach((s) => {
         const docRef = db.collection("skills").doc();
         batch.set(docRef, {
           ...s,
@@ -1259,14 +1317,9 @@
         });
       });
       await batch.commit();
-      if (showToastAlert) showToast("Default skills synced!", "success");
+      if (showToastAlert) showToast(`Added ${toAdd.length} default skill(s)!`, "success");
 
-      const snapshot = await db.collection("skills").get();
-      allSkills = [];
-      snapshot.forEach((doc) => {
-        allSkills.push({ id: doc.id, ...doc.data() });
-      });
-      renderSkills();
+      await loadSkills();
     } catch (err) {
       console.error("Error seeding skills:", err);
     }

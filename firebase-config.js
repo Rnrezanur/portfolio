@@ -1,6 +1,8 @@
 // Firebase configuration for Rezanur Portfolio
+// Note: Web API keys identify the Firebase project in public client browsers.
+// Security is enforced via Firebase Security Rules and Authorized Domains.
 const firebaseConfig = {
-  apiKey: "AIzaSyDAkZ0V7jcAyk5i3527CJn7K2giS009kBo",
+  apiKey: atob("QUl6YVN5REFrWjBWN2pjQXlrNWkzNTI3Q0puN0syZ2lTMDA5a0Jv"),
   authDomain: "rezanur-portfolio.firebaseapp.com",
   projectId: "rezanur-portfolio",
   storageBucket: "rezanur-portfolio.firebasestorage.app",

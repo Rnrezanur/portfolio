@@ -509,8 +509,15 @@ async function initDynamicPortfolio() {
     const projectsSnapshot = await db.collection("projects").get();
     if (!projectsSnapshot.empty) {
       const remoteProjects = [];
+      const seenTitles = new Set();
       projectsSnapshot.forEach((doc) => {
-        remoteProjects.push({ id: doc.id, ...doc.data() });
+        const data = doc.data();
+        const normTitle = (data.title || "").toLowerCase().trim();
+        if (normTitle && seenTitles.has(normTitle)) {
+          return;
+        }
+        if (normTitle) seenTitles.add(normTitle);
+        remoteProjects.push({ id: doc.id, ...data });
       });
       // Sort by order ascending
       remoteProjects.sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
