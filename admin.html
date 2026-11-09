@@ -116,10 +116,10 @@
 
       <form id="authForm" class="space-y-4">
         <div>
-          <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Email Address</label>
+          <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Admin Email Address</label>
           <div class="relative">
             <i class="fa-solid fa-envelope absolute left-3 top-1/2 -translate-y-1/2 text-[#9d9da5] text-xs"></i>
-            <input type="email" id="authEmail" required placeholder="admin@example.com" class="input-field w-full pl-9 pr-3 py-2.5 rounded-lg text-sm" />
+            <input type="email" id="authEmail" required value="rezanurbinshamim@gmail.com" placeholder="rezanurbinshamim@gmail.com" class="input-field w-full pl-9 pr-3 py-2.5 rounded-lg text-sm" />
           </div>
         </div>
 
@@ -127,8 +127,9 @@
           <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Password</label>
           <div class="relative">
             <i class="fa-solid fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-[#9d9da5] text-xs"></i>
-            <input type="password" id="authPassword" required placeholder="••••••••" class="input-field w-full pl-9 pr-3 py-2.5 rounded-lg text-sm" />
+            <input type="password" id="authPassword" required placeholder="Enter password" class="input-field w-full pl-9 pr-3 py-2.5 rounded-lg text-sm" />
           </div>
+          <p class="text-[11px] font-mono-code text-[#9d9da5] mt-1.5">Default password: <code class="text-[#2ce98a] bg-black/40 px-1.5 py-0.5 rounded font-bold">admin123456</code></p>
         </div>
 
         <button type="submit" id="authSubmitBtn" class="accent-btn w-full py-2.5 rounded-lg text-sm mt-2 flex items-center justify-center gap-2">
@@ -139,10 +140,10 @@
 
       <div class="mt-6 pt-4 border-t border-[rgba(255,255,255,0.08)] flex items-center justify-between text-xs">
         <button id="toggleAuthModeBtn" class="text-[#2ce98a] hover:underline font-mono-code">
-          First time? Create Admin Account
+          Create Account
         </button>
         <button id="forgotPasswordBtn" class="text-[#9d9da5] hover:text-white font-mono-code">
-          Reset password
+          Reset password link
         </button>
       </div>
 
@@ -389,6 +390,30 @@
             <span>Save Quick Info &amp; CV</span>
           </button>
         </form>
+
+        <!-- Change Password Card -->
+        <div class="panel rounded-xl p-6 sm:p-8 space-y-4">
+          <div class="flex items-center gap-2 text-[#2ce98a]">
+            <i class="fa-solid fa-key text-base"></i>
+            <h4 class="font-syne font-bold text-base text-white">Change Admin Password</h4>
+          </div>
+          <p class="text-xs font-mono-code text-[#9d9da5]">Update your login password anytime. Minimum 6 characters.</p>
+
+          <form id="changePasswordForm" class="space-y-4 max-w-md">
+            <div>
+              <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">New Password</label>
+              <input type="password" id="newAdminPassword" required minlength="6" placeholder="Enter new password" class="input-field w-full px-3 py-2 rounded-lg text-xs" />
+            </div>
+            <div>
+              <label class="block text-xs font-mono-code text-[#9d9da5] mb-1">Confirm New Password</label>
+              <input type="password" id="confirmAdminPassword" required minlength="6" placeholder="Re-enter new password" class="input-field w-full px-3 py-2 rounded-lg text-xs" />
+            </div>
+            <button type="submit" id="changePasswordBtn" class="accent-btn px-4 py-2 rounded-lg text-xs font-mono-code flex items-center gap-1.5">
+              <i class="fa-solid fa-shield-halved"></i>
+              <span>Update Password</span>
+            </button>
+          </form>
+        </div>
       </section>
 
     </main>

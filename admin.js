@@ -1257,4 +1257,49 @@
       saveBtn.disabled = false;
     }
   });
+
+  // Change Admin Password Form Handler
+  const changePasswordForm = document.getElementById("changePasswordForm");
+  const newAdminPassword = document.getElementById("newAdminPassword");
+  const confirmAdminPassword = document.getElementById("confirmAdminPassword");
+  const changePasswordBtn = document.getElementById("changePasswordBtn");
+
+  changePasswordForm?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const newPass = newAdminPassword.value;
+    const confirmPass = confirmAdminPassword.value;
+
+    if (newPass.length < 6) {
+      alert("Password must be at least 6 characters long.");
+      return;
+    }
+
+    if (newPass !== confirmPass) {
+      alert("Passwords do not match. Please re-enter.");
+      return;
+    }
+
+    changePasswordBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Updating...';
+    changePasswordBtn.disabled = true;
+
+    try {
+      const user = firebase.auth().currentUser;
+      if (!user) {
+        throw new Error("No authenticated user found. Please log in again.");
+      }
+      await user.updatePassword(newPass);
+      showToast("Password updated successfully! Use your new password next time.", "success");
+      newAdminPassword.value = "";
+      confirmAdminPassword.value = "";
+    } catch (err) {
+      if (err.code === "auth/requires-recent-login") {
+        alert("For security, please log out and log in again before changing your password.");
+      } else {
+        alert(`Error changing password: ${err.message}`);
+      }
+    } finally {
+      changePasswordBtn.innerHTML = '<i class="fa-solid fa-shield-halved"></i> <span>Update Password</span>';
+      changePasswordBtn.disabled = false;
+    }
+  });
 })();
