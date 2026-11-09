@@ -11,7 +11,6 @@
   const authPassword = document.getElementById("authPassword");
   const authAlert = document.getElementById("authAlert");
   const authSubmitText = document.getElementById("authSubmitText");
-  const toggleAuthModeBtn = document.getElementById("toggleAuthModeBtn");
   const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
   const userEmailBadge = document.getElementById("userEmailBadge");
   const logoutBtn = document.getElementById("logoutBtn");
@@ -107,7 +106,6 @@
   const resetCvBtn = document.getElementById("resetCvBtn");
 
   // State
-  let isRegisterMode = false;
   let allProjects = [];
   let allEducation = [];
   let allExperience = [];
@@ -304,42 +302,24 @@
     }
   });
 
-  // Toggle Auth Mode (Sign in vs Register)
-  toggleAuthModeBtn.addEventListener("click", () => {
-    isRegisterMode = !isRegisterMode;
-    authAlert.classList.add("hidden");
-    if (isRegisterMode) {
-      authSubmitText.textContent = "Create Admin Account";
-      toggleAuthModeBtn.textContent = "Already have an account? Sign In";
-    } else {
-      authSubmitText.textContent = "Sign In to Dashboard";
-      toggleAuthModeBtn.textContent = "First time? Create Admin Account";
-    }
-  });
-
-  // Auth Form Submit
+  // Auth Form Submit (Sign In Only)
   authForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const email = authEmail.value.trim();
     const password = authPassword.value;
 
     authAlert.classList.add("hidden");
-    authSubmitText.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Processing...';
+    authSubmitText.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Signing In...';
 
     try {
-      if (isRegisterMode) {
-        await auth.createUserWithEmailAndPassword(email, password);
-        showToast("Admin account created successfully!", "success");
-      } else {
-        await auth.signInWithEmailAndPassword(email, password);
-        showToast("Signed in successfully!", "success");
-      }
+      await auth.signInWithEmailAndPassword(email, password);
+      showToast("Signed in successfully!", "success");
     } catch (err) {
       authAlert.textContent = err.message;
       authAlert.className = "mb-4 p-3 rounded-lg text-xs font-mono-code border bg-red-950/40 text-red-400 border-red-500/30";
       authAlert.classList.remove("hidden");
     } finally {
-      authSubmitText.textContent = isRegisterMode ? "Create Admin Account" : "Sign In to Dashboard";
+      authSubmitText.textContent = "Sign In to Dashboard";
     }
   });
 
