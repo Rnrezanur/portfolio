@@ -266,45 +266,134 @@ sideMenuLinks.forEach((link) => {
 });
 
 let projects = [
+  // --- FEATURED PROJECTS (1-5) ---
   {
-    title: "IntelliEco Smart Eco-System Management Platform",
-    description: "A web app concept for monitoring and managing eco-friendly systems with smart data tracking.",
-    demo: null,
-    link: "https://github.com/Rnrezanur/intellieco-eco-system",
-    pinned: true,
-    tags: ["JavaScript", "Full Stack", "Dashboard"],
-  },
-    {
     title: "TaskGram",
-    description: "TaskGram is a Telegram-based task manager that sends automated reminders for scheduled tasks.",
+    description: "A Telegram-based intelligent task manager and automation bot that sends automated reminders, scheduled alerts, and task notifications directly into your Telegram chat.",
+    tags: ["TypeScript", "Telegram Bot API", "PostgreSQL", "Node.js"],
     demo: "https://task-gram-one.vercel.app",
     link: "https://github.com/Rnrezanur/TaskGram",
     pinned: true,
-    tags: ["Automated Reminders", "Typescript","Telegram Bot", "PLpgSQL"],
+    order: 1,
+  },
+  {
+    title: "Stream Command Center",
+    description: "Unified live-streaming dashboard allowing creators to switch OBS scenes, mute audio feeds, trigger streams/recordings, and aggregate multi-platform chat and real-time viewer analytics.",
+    tags: ["JavaScript", "OBS WebSocket", "Real-Time Dashboard", "Live Streaming"],
+    demo: "https://stream-command.vercel.app",
+    link: "https://github.com/Rnrezanur/Stream-Command-Center",
+    pinned: true,
+    order: 2,
+  },
+  {
+    title: "DFM (Download Fast Manager)",
+    description: "High-performance Internet Download Manager alternative featuring multi-threaded segmented file downloads, streaming video grabber, pause/resume engine, and modern desktop UI for Windows and Ubuntu.",
+    tags: ["Python", "Multi-Threading", "Network I/O", "Desktop GUI"],
+    demo: null,
+    link: "https://github.com/Rnrezanur/DFM",
+    pinned: true,
+    order: 3,
+  },
+  {
+    title: "Network Anomaly & Threat Detection Engine",
+    description: "High-throughput packet analysis engine designed for real-time network anomaly detection, traffic profiling, signature-based security monitoring, and cyber threat mitigation.",
+    tags: ["Java", "Network Security", "Multi-Threading", "Packet Analysis"],
+    demo: null,
+    link: "https://github.com/Rnrezanur/Multithreated-network-anomaly-and-threat-detection-engine",
+    pinned: true,
+    order: 4,
+  },
+  {
+    title: "IntelliEco Smart Eco-System Management Platform",
+    description: "A web app concept for monitoring and managing eco-friendly systems with smart data tracking, environmental sensor metrics, and resource sustainability analytics.",
+    tags: ["JavaScript", "IoT Analytics", "Dashboard", "Full Stack"],
+    demo: null,
+    link: "https://github.com/Rnrezanur/intellieco-eco-system",
+    pinned: true,
+    order: 5,
+  },
+
+  // --- ALL PROJECTS / STANDARD PORTFOLIO (6-14) ---
+  {
+    title: "Rezanur Pay",
+    description: "Modern fintech payment interface and checkout concept with transaction flows, interactive card validation, and sleek mobile-first design.",
+    tags: ["HTML5", "CSS3", "JavaScript", "Fintech UI"],
+    demo: "https://rezanur-pay.vercel.app/",
+    link: "https://github.com/Rnrezanur/rezanur-pay",
+    pinned: false,
+    order: 6,
+  },
+  {
+    title: "Job Tracker",
+    description: "Interactive career job application tracking board with stage metrics (Applied, Interview, Offer, Rejected), notes logging, and dark-themed interface.",
+    tags: ["JavaScript", "Productivity", "LocalStorage", "Dark Theme"],
+    demo: null,
+    link: "https://github.com/Rnrezanur/job-tracker",
+    pinned: false,
+    order: 7,
+  },
+  {
+    title: "Funky Flowers Market",
+    description: "Interactive e-commerce florist shop template with animated bouquet showcases, catalog filtering, and modern responsive visual presentation.",
+    tags: ["HTML5", "CSS3", "JavaScript", "E-commerce UI"],
+    demo: "https://funky-flowers-market.vercel.app",
+    link: "https://github.com/Rnrezanur/flowers-market",
+    pinned: false,
+    order: 8,
   },
   {
     title: "Simple Fashion UI",
-    description: "A responsive fashion landing page focused on clean layout, stylish presentation, and modern visuals.",
+    description: "A responsive fashion landing page focused on clean layout, stylish presentation, and modern visual typography.",
+    tags: ["HTML5", "Tailwind CSS", "Responsive Design"],
     demo: "https://simple-fashion.vercel.app",
     link: "https://github.com/Rnrezanur/simple-fashion",
     pinned: false,
-    tags: ["HTML", "Tailwind", "Responsive"],
+    order: 9,
   },
   {
     title: "Influencer Gear",
-    description: "A responsive e-commerce showcase page designed to present products with a simple and polished layout.",
+    description: "Responsive digital creator equipment review and showcase landing page designed to present creator gear setups cleanly.",
+    tags: ["HTML5", "CSS3", "E-Commerce UI"],
     demo: "https://influencer-gear-hazel.vercel.app/",
-    link: "",
+    link: "https://github.com/Rnrezanur/influencer-gear",
     pinned: false,
-    tags: ["HTML", "CSS", "E-commerce UI"],
+    order: 10,
   },
   {
-    title: "Rock-Paper-Scissors",
-    description: "An interactive game project with a graphical interface and clear user feedback.",
+    title: "Esports Gaming Tournament Hub",
+    description: "Esports tournament hub concept featuring dynamic match bracket rendering, tournament schedules, and competitor team profiles.",
+    tags: ["HTML5", "CSS3", "JavaScript", "Gaming UI"],
+    demo: null,
+    link: "https://github.com/Rnrezanur/gaming-tournament",
+    pinned: false,
+    order: 11,
+  },
+  {
+    title: "TypeScript Problem Solving & DSA",
+    description: "Curated collection of algorithms, data structure implementations, and competitive coding problem solutions written in modern TypeScript.",
+    tags: ["TypeScript", "Algorithms", "Data Structures", "Problem Solving"],
+    demo: null,
+    link: "https://github.com/Rnrezanur/typescript-problem-solving",
+    pinned: false,
+    order: 12,
+  },
+  {
+    title: "Rock-Paper-Scissors Interactive Game",
+    description: "Interactive graphical Python game implementation featuring score counters, animated gameplay feedback, and clean state logic.",
+    tags: ["Python", "Game Logic", "UI Development"],
     demo: null,
     link: "https://github.com/Rnrezanur/rock-paper-scissors",
     pinned: false,
-    tags: ["Python", "GUI", "Logic"],
+    order: 13,
+  },
+  {
+    title: "Frontend Logic & Experiments (Simple Java P1)",
+    description: "Interactive frontend coding experiments focusing on DOM manipulation techniques, state handling, and interactive UI logic.",
+    tags: ["JavaScript", "DOM API", "Frontend Logic"],
+    demo: null,
+    link: "https://github.com/Rnrezanur/simple-java-p1",
+    pinned: false,
+    order: 14,
   },
 ];
 
@@ -316,7 +405,7 @@ const featuredPageNumber = document.getElementById("featuredPageNumber");
 
 let showAllFeatured = false;
 let featuredPage = 1;
-const FEATURE_LIMIT = 2;
+const FEATURE_LIMIT = 4;
 const FEATURE_PER_PAGE = 4;
 
 const projectsPerPage = 4;
