@@ -210,6 +210,10 @@
             <p class="text-xs font-mono-code text-[#9d9da5]">Add, edit, or remove featured and portfolio projects.</p>
           </div>
           <div class="flex items-center gap-2 w-full sm:w-auto">
+            <button id="openGithubModalBtn" class="ghost-btn hover:border-[#2ce98a] text-[#2ce98a] px-3 py-2 rounded-lg text-xs font-mono-code flex items-center gap-1.5" title="Browse and import your GitHub repositories">
+              <i class="fa-brands fa-github text-sm"></i>
+              <span>Import from GitHub</span>
+            </button>
             <button id="importDefaultsBtn" class="ghost-btn px-3 py-2 rounded-lg text-xs font-mono-code flex items-center gap-1.5" title="Re-sync default projects into Firestore">
               <i class="fa-solid fa-rotate text-[#2ce98a]"></i>
               <span>Re-sync Defaults</span>
@@ -422,6 +426,17 @@
         </button>
       </div>
 
+      <div class="flex items-center justify-between bg-black/40 px-3.5 py-2.5 rounded-xl border border-[var(--line)]">
+        <div class="flex items-center gap-2">
+          <i class="fa-brands fa-github text-[#2ce98a] text-base"></i>
+          <span class="text-xs font-mono-code text-[#9d9da5]">Save time:</span>
+        </div>
+        <button type="button" id="quickGithubRepoBtn" class="text-xs text-[#2ce98a] hover:underline font-mono-code flex items-center gap-1.5">
+          <span>Auto-fill from GitHub Repo</span>
+          <i class="fa-solid fa-arrow-right text-[10px]"></i>
+        </button>
+      </div>
+
       <form id="projectForm" class="space-y-4">
         <input type="hidden" id="projectId" />
 
@@ -627,6 +642,48 @@
           <button type="submit" class="accent-btn px-5 py-2 rounded-lg text-xs font-mono-code">Save Skill</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- ================= GITHUB REPOS IMPORT MODAL ================= -->
+  <div id="githubModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="panel max-w-2xl w-full rounded-2xl p-6 sm:p-8 space-y-5 my-8 max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between border-b border-[var(--line)] pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center text-white text-lg">
+            <i class="fa-brands fa-github"></i>
+          </div>
+          <div>
+            <h3 class="font-syne text-lg font-bold">Import from GitHub</h3>
+            <p class="text-xs font-mono-code text-[#9d9da5]">Repositories from <a href="https://github.com/Rnrezanur" target="_blank" class="text-[#2ce98a] hover:underline font-semibold">@Rnrezanur</a></p>
+          </div>
+        </div>
+        <button id="closeGithubModalBtn" class="text-[#9d9da5] hover:text-white text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Search & Refresh bar -->
+      <div class="flex items-center gap-3">
+        <div class="relative flex-1">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-xs text-[#9d9da5]"></i>
+          <input type="text" id="githubSearchInput" placeholder="Filter repositories by name or language..." class="input-field w-full pl-9 pr-3 py-2 rounded-lg text-xs" />
+        </div>
+        <button id="refreshGithubBtn" class="ghost-btn px-3 py-2 rounded-lg text-xs font-mono-code flex items-center gap-1.5" title="Refresh repositories from GitHub">
+          <i class="fa-solid fa-arrows-rotate"></i>
+          <span>Refresh</span>
+        </button>
+      </div>
+
+      <!-- Repos List Container (Scrollable) -->
+      <div id="githubReposList" class="overflow-y-auto space-y-3 flex-1 pr-1 min-h-[300px]">
+        <!-- Dynamically rendered -->
+      </div>
+
+      <div class="pt-3 border-t border-[var(--line)] flex items-center justify-between text-xs font-mono-code text-[#9d9da5]">
+        <span id="githubReposCount">Loading repositories...</span>
+        <button id="closeGithubModalFooterBtn" class="ghost-btn px-4 py-1.5 rounded-lg text-xs">Close</button>
+      </div>
     </div>
   </div>
 

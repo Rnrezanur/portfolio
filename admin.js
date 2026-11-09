@@ -27,6 +27,15 @@
   const projectFilterPinned = document.getElementById("projectFilterPinned");
   const openAddProjectModalBtn = document.getElementById("openAddProjectModalBtn");
   const importDefaultsBtn = document.getElementById("importDefaultsBtn");
+  const openGithubModalBtn = document.getElementById("openGithubModalBtn");
+  const githubModal = document.getElementById("githubModal");
+  const closeGithubModalBtn = document.getElementById("closeGithubModalBtn");
+  const closeGithubModalFooterBtn = document.getElementById("closeGithubModalFooterBtn");
+  const githubReposList = document.getElementById("githubReposList");
+  const githubSearchInput = document.getElementById("githubSearchInput");
+  const refreshGithubBtn = document.getElementById("refreshGithubBtn");
+  const githubReposCount = document.getElementById("githubReposCount");
+  const quickGithubRepoBtn = document.getElementById("quickGithubRepoBtn");
   const projectModal = document.getElementById("projectModal");
   const closeProjectModalBtn = document.getElementById("closeProjectModalBtn");
   const cancelProjectModalBtn = document.getElementById("cancelProjectModalBtn");
@@ -110,6 +119,8 @@
   let allEducation = [];
   let allExperience = [];
   let allSkills = [];
+  let githubRepos = [];
+  let isFetchingGithub = false;
   let pendingCvBase64 = null;
   let pendingCvName = null;
 
@@ -652,6 +663,235 @@
   };
 
   importDefaultsBtn.addEventListener("click", () => seedDefaultProjects(true));
+
+  // =============================================================
+  // GITHUB REPOSITORIES IMPORT SYSTEM
+  // =============================================================
+  function openGithubModal() {
+    githubModal.classList.remove("hidden");
+    if (githubRepos.length === 0) {
+      fetchGithubRepos();
+    } else {
+      renderGithubRepos();
+    }
+  }
+
+  function closeGithubModal() {
+    githubModal.classList.add("hidden");
+  }
+
+  openGithubModalBtn?.addEventListener("click", openGithubModal);
+  closeGithubModalBtn?.addEventListener("click", closeGithubModal);
+  closeGithubModalFooterBtn?.addEventListener("click", closeGithubModal);
+  quickGithubRepoBtn?.addEventListener("click", () => {
+    closeProjectModal();
+    openGithubModal();
+  });
+
+  refreshGithubBtn?.addEventListener("click", () => fetchGithubRepos(true));
+  githubSearchInput?.addEventListener("input", renderGithubRepos);
+
+  async function fetchGithubRepos(force = false) {
+    if (isFetchingGithub) return;
+    if (githubRepos.length > 0 && !force) {
+      renderGithubRepos();
+      return;
+    }
+
+    isFetchingGithub = true;
+    githubReposList.innerHTML = `
+      <div class="py-16 text-center text-[#9d9da5] font-mono-code text-xs space-y-2">
+        <i class="fa-solid fa-spinner animate-spin text-xl text-[#2ce98a]"></i>
+        <p>Connecting to GitHub API for @Rnrezanur...</p>
+      </div>
+    `;
+    githubReposCount.textContent = "Fetching repositories...";
+
+    try {
+      const response = await fetch("https://api.github.com/users/Rnrezanur/repos?sort=updated&per_page=100");
+      if (!response.ok) {
+        throw new Error(`GitHub API returned status ${response.status}`);
+      }
+      const data = await response.json();
+      // Filter out forks or sort by pushed_at descending
+      githubRepos = Array.isArray(data) ? data : [];
+      renderGithubRepos();
+    } catch (err) {
+      console.error("Error fetching GitHub repos:", err);
+      githubReposList.innerHTML = `
+        <div class="p-4 rounded-xl bg-red-950/40 border border-red-500/30 text-red-400 text-xs font-mono-code space-y-2">
+          <p class="font-bold"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Failed to load GitHub repositories</p>
+          <p class="text-[11px] opacity-80">${err.message}</p>
+          <button onclick="fetchGithubRepos(true)" class="accent-btn px-3 py-1 rounded text-[11px] mt-2">Retry</button>
+        </div>
+      `;
+      githubReposCount.textContent = "Error loading";
+    } finally {
+      isFetchingGithub = false;
+    }
+  }
+
+  function renderGithubRepos() {
+    if (!githubReposList) return;
+
+    const query = (githubSearchInput?.value || "").toLowerCase().trim();
+    const filtered = githubRepos.filter((repo) => {
+      if (!query) return true;
+      const matchesName = repo.name.toLowerCase().includes(query);
+      const matchesDesc = (repo.description || "").toLowerCase().includes(query);
+      const matchesLang = (repo.language || "").toLowerCase().includes(query);
+      return matchesName || matchesDesc || matchesLang;
+    });
+
+    githubReposCount.textContent = `${filtered.length} of ${githubRepos.length} repositories`;
+
+    if (filtered.length === 0) {
+      githubReposList.innerHTML = `
+        <div class="py-12 text-center text-[#9d9da5] font-mono-code text-xs space-y-2">
+          <i class="fa-brands fa-github text-2xl opacity-40"></i>
+          <p>No repositories match your filter "${query}".</p>
+        </div>
+      `;
+      return;
+    }
+
+    githubReposList.innerHTML = filtered
+      .map((repo) => {
+        // Check if repo is already on portfolio
+        const isAlreadyAdded = allProjects.some((p) => {
+          const matchLink = p.link && p.link.toLowerCase().trim() === repo.html_url.toLowerCase().trim();
+          const matchTitle = p.title && p.title.toLowerCase().trim() === repo.name.toLowerCase().trim();
+          return matchLink || matchTitle;
+        });
+
+        const topics = repo.topics || [];
+        const tags = [repo.language, ...topics.slice(0, 3)].filter(Boolean);
+        const tagsHtml = tags
+          .map((t) => `<span class="px-2 py-0.5 rounded text-[10px] font-mono-code bg-white/5 border border-white/10 text-[#9d9da5]">${t}</span>`)
+          .join("");
+
+        return `
+          <div class="panel-soft rounded-xl p-4 border border-[var(--line)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 hover:border-[#2ce98a]/30 transition-all group">
+            <div class="space-y-1.5 flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <h4 class="font-syne font-bold text-sm text-white group-hover:text-[#2ce98a] transition-colors truncate">${repo.name}</h4>
+                ${
+                  repo.language
+                    ? `<span class="px-2 py-0.5 rounded text-[10px] font-mono-code bg-[#2ce98a]/15 text-[#2ce98a] border border-[#2ce98a]/30 font-semibold">${repo.language}</span>`
+                    : ""
+                }
+                ${
+                  repo.stargazers_count > 0
+                    ? `<span class="text-[10px] font-mono-code text-yellow-400/90 flex items-center gap-1"><i class="fa-solid fa-star text-[9px]"></i>${repo.stargazers_count}</span>`
+                    : ""
+                }
+              </div>
+
+              <p class="text-xs text-[#9d9da5] line-clamp-2 leading-relaxed">${repo.description || "No description provided on GitHub."}</p>
+
+              <div class="flex items-center gap-3 text-[11px] font-mono-code pt-1 flex-wrap">
+                <a href="${repo.html_url}" target="_blank" class="text-white/80 hover:text-[#2ce98a] flex items-center gap-1">
+                  <i class="fa-brands fa-github text-xs"></i> GitHub
+                </a>
+                ${
+                  repo.homepage
+                    ? `<a href="${repo.homepage.startsWith("http") ? repo.homepage : "https://" + repo.homepage}" target="_blank" class="text-[#2ce98a] hover:underline flex items-center gap-1"><i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i> Live Demo</a>`
+                    : ""
+                }
+                ${tagsHtml}
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
+              ${
+                isAlreadyAdded
+                  ? `
+                  <span class="px-3 py-1.5 rounded-lg text-xs font-mono-code bg-[#2ce98a]/10 text-[#2ce98a] border border-[#2ce98a]/20 flex items-center gap-1.5">
+                    <i class="fa-solid fa-check text-[10px]"></i> In Portfolio
+                  </span>
+                `
+                  : `
+                  <button onclick="window.quickImportGithubRepo('${repo.name}')" class="accent-btn px-3 py-1.5 rounded-lg text-xs font-mono-code flex items-center gap-1.5" title="Add directly to your portfolio">
+                    <i class="fa-solid fa-plus text-[10px]"></i> Add
+                  </button>
+                  <button onclick="window.selectAndEditGithubRepo('${repo.name}')" class="ghost-btn hover:text-[#2ce98a] px-2.5 py-1.5 rounded-lg text-xs font-mono-code flex items-center gap-1" title="Customize details before adding">
+                    <i class="fa-solid fa-pen text-[10px]"></i> Edit
+                  </button>
+                `
+              }
+            </div>
+          </div>
+        `;
+      })
+      .join("");
+  }
+
+  // 1-Click Quick Import from GitHub
+  window.quickImportGithubRepo = async function (repoName) {
+    const repo = githubRepos.find((r) => r.name === repoName);
+    if (!repo) return;
+
+    const tags = [repo.language, ...(repo.topics || [])].filter(Boolean);
+    if (tags.length === 0) tags.push("GitHub");
+
+    let demoUrl = null;
+    if (repo.homepage) {
+      demoUrl = repo.homepage.startsWith("http") ? repo.homepage : `https://${repo.homepage}`;
+    }
+
+    const newProject = {
+      title: repo.name,
+      description: repo.description || "Open source project by Rezanur.",
+      tags: tags,
+      demo: demoUrl,
+      link: repo.html_url,
+      image: null,
+      pinned: false,
+      order: allProjects.length + 1,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+
+    try {
+      await db.collection("projects").add(newProject);
+      showToast(`Added "${repo.name}" to your portfolio!`, "success");
+      await loadProjects();
+      renderGithubRepos();
+    } catch (err) {
+      console.error(err);
+      alert(`Error importing repository: ${err.message}`);
+    }
+  };
+
+  // Select and Edit GitHub repo before adding
+  window.selectAndEditGithubRepo = function (repoName) {
+    const repo = githubRepos.find((r) => r.name === repoName);
+    if (!repo) return;
+
+    const tags = [repo.language, ...(repo.topics || [])].filter(Boolean);
+    if (tags.length === 0) tags.push("GitHub");
+
+    let demoUrl = "";
+    if (repo.homepage) {
+      demoUrl = repo.homepage.startsWith("http") ? repo.homepage : `https://${repo.homepage}`;
+    }
+
+    projectForm.reset();
+    projectId.value = "";
+    projectTitle.value = repo.name;
+    projectDescription.value = repo.description || "";
+    projectTags.value = tags.join(", ");
+    projectDemo.value = demoUrl;
+    projectLink.value = repo.html_url;
+    projectImage.value = "";
+    imagePreview.src = "";
+    imagePreviewContainer.classList.add("hidden");
+    projectPinned.checked = false;
+    projectOrder.value = allProjects.length + 1;
+
+    modalTitle.textContent = `Add "${repo.name}" from GitHub`;
+    closeGithubModal();
+    projectModal.classList.remove("hidden");
+  };
 
   // =============================================================
   // 2. EDUCATION MANAGEMENT
