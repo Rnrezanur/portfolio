@@ -2307,30 +2307,15 @@ button:disabled {
    RESPONSIVE LAYOUT SYSTEM - EVERY SCREEN SIZE
    ========================================================================== */
 
-/* 1. Ultra-Wide & 4K Displays (> 1600px) */
-@media (min-width: 1600px) {
-  :root {
-    --shell-max: 96rem;
-    --layout-gap: 3.5rem;
-    --sidebar-width: 22.5rem;
-  }
-
-  .page-shell {
-    max-width: var(--shell-max);
-    margin-inline: auto;
-    padding-inline: 2rem;
-  }
-}
-
-/* 2. Large Laptops & Desktops (<= 1500px) */
+/* 1. Large Laptops & Desktops (<= 1500px) */
 @media (max-width: 1500px) {
   :root {
-    --content-offset: clamp(0rem, 3.5vw, 3rem);
-    --sidebar-width: clamp(16.75rem, 21vw, 21rem);
+    --content-offset: clamp(0rem, 4vw, 4rem);
+    --sidebar-width: clamp(16.75rem, 22vw, 21.5rem);
   }
 
   .page-shell {
-    grid-template-columns: minmax(17rem, var(--sidebar-width)) minmax(0, 1fr);
+    grid-template-columns: minmax(17rem, 22rem) minmax(0, 1fr);
   }
 
   .dock-nav {
@@ -2347,30 +2332,30 @@ button:disabled {
   }
 }
 
-/* 3. Medium Screens / Compact Laptops (<= 1200px) */
+/* 2. Medium Screens / Compact Laptops (<= 1200px) */
 @media (max-width: 1200px) {
   :root {
     --content-offset: clamp(0rem, 2vw, 1.5rem);
-    --section-max: 50rem;
-    --sidebar-width: clamp(16.5rem, 26vw, 20rem);
-    --layout-gap: clamp(1rem, 2vw, 1.75rem);
+    --section-max: 52rem;
+    --sidebar-width: clamp(17rem, 27vw, 20.75rem);
+    --layout-gap: clamp(1rem, 2.2vw, 1.75rem);
   }
 
   .page-shell {
-    grid-template-columns: minmax(16.5rem, var(--sidebar-width)) minmax(0, 1fr);
+    grid-template-columns: minmax(17rem, 20.75rem) minmax(0, 1fr);
   }
 
   .content-section,
   .intro-section {
-    padding-inline: clamp(0.25rem, 1vw, 0.75rem);
+    padding-inline: clamp(0.35rem, 1.2vw, 0.9rem);
   }
 
   .hero-heading {
-    font-size: clamp(2.5rem, 4.5vw, 4rem);
+    font-size: clamp(2.7rem, 4.8vw, 4.35rem);
   }
 
   .hero-text {
-    max-width: min(100%, 35rem);
+    max-width: min(100%, 36rem);
   }
 
   .hero-actions .hero-btn {
@@ -2380,7 +2365,7 @@ button:disabled {
   }
 }
 
-/* 4. Tablets & Small Laptops (<= 1024px) */
+/* 3. Tablets & Small Laptops (<= 1024px) */
 @media (max-width: 1024px) {
   .page-shell {
     grid-template-columns: 1fr;
