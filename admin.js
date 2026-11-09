@@ -300,7 +300,7 @@
     {
       role: "Shahid Bulbul Government College",
       meta: "Higher Secondary Certificate (HSC) - Science",
-      period: "2018 - 2019",
+      period: "2018 - 2020",
       note: "GPA 5.00",
       isActive: false,
       order: 2,
@@ -308,7 +308,7 @@
     {
       role: "Pabna Collectorate Public School and College",
       meta: "Secondary School Certificate (SSC) - Science",
-      period: "2016 - 2017",
+      period: "2016 - 2018",
       note: "GPA 5.00",
       isActive: false,
       order: 3,
