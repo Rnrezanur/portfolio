@@ -36,6 +36,15 @@
   const refreshGithubBtn = document.getElementById("refreshGithubBtn");
   const importAllGithubBtn = document.getElementById("importAllGithubBtn");
   const githubReposCount = document.getElementById("githubReposCount");
+  const toggleGithubTokenBtn = document.getElementById("toggleGithubTokenBtn");
+  const githubTokenBtnText = document.getElementById("githubTokenBtnText");
+  const githubTokenCard = document.getElementById("githubTokenCard");
+  const githubTokenInput = document.getElementById("githubTokenInput");
+  const saveGithubTokenBtn = document.getElementById("saveGithubTokenBtn");
+  const clearGithubTokenBtn = document.getElementById("clearGithubTokenBtn");
+  const githubRateLimitBanner = document.getElementById("githubRateLimitBanner");
+  const githubRateLimitText = document.getElementById("githubRateLimitText");
+  const rateLimitAddTokenBtn = document.getElementById("rateLimitAddTokenBtn");
   const quickGithubRepoBtn = document.getElementById("quickGithubRepoBtn");
   const projectModal = document.getElementById("projectModal");
   const closeProjectModalBtn = document.getElementById("closeProjectModalBtn");
@@ -172,6 +181,27 @@
       tags: ["Python", "GUI", "Logic"],
       order: 5,
     },
+  ];
+
+  // Cached fallback snapshot of @Rnrezanur's repositories
+  // Guarantees repositories load instantly even if GitHub rate limits unauthenticated requests
+  const defaultGithubReposBackup = [
+    { name: "DFM", description: "DFM (Download Fast Manager) - High-performance IDM alternative with multi-threaded segmented downloads, streaming video grabber, and modern desktop UI for Windows and Ubuntu.", html_url: "https://github.com/Rnrezanur/DFM", homepage: null, language: "Python", stargazers_count: 0, topics: [], fork: false },
+    { name: "job-tracker", description: "Interactive job tracking dashboard with interview/rejection status toggles, metrics, and dark theme support.", html_url: "https://github.com/Rnrezanur/job-tracker", homepage: null, language: "HTML", stargazers_count: 0, topics: [], fork: false },
+    { name: "rezanur-pay", description: "Modern responsive payment and checkout UI template with transaction flows.", html_url: "https://github.com/Rnrezanur/rezanur-pay", homepage: "https://rezanur-pay.vercel.app/", language: "HTML", stargazers_count: 0, topics: [], fork: false },
+    { name: "flowers-market", description: "Interactive e-commerce florist shop template with animated product showcases.", html_url: "https://github.com/Rnrezanur/flowers-market", homepage: "https://funky-flowers-market.vercel.app", language: "HTML", stargazers_count: 0, topics: [], fork: false },
+    { name: "Stream-Command-Center", description: "Stream Command Center that allows creators to control OBS scenes, mute audio, start/stop streaming and recording, while monitoring live viewer counts and comments from multiple platforms in one unified dashboard.", html_url: "https://github.com/Rnrezanur/Stream-Command-Center", homepage: "https://stream-command.vercel.app", language: "JavaScript", stargazers_count: 0, topics: [], fork: false },
+    { name: "TaskGram", description: "TaskGram is a Telegram-based task manager that sends automated reminders for scheduled tasks.", html_url: "https://github.com/Rnrezanur/TaskGram", homepage: "https://task-gram-one.vercel.app", language: "TypeScript", stargazers_count: 0, topics: [], fork: false },
+    { name: "Multithreated-network-anomaly-and-threat-detection-engine", description: "Multi-threaded network anomaly and security threat detection engine implemented in Java.", html_url: "https://github.com/Rnrezanur/Multithreated-network-anomaly-and-threat-detection-engine", homepage: null, language: "Java", stargazers_count: 0, topics: [], fork: false },
+    { name: "intellieco-eco-system", description: "A web app concept for monitoring and managing eco-friendly systems with smart data tracking.", html_url: "https://github.com/Rnrezanur/intellieco-eco-system", homepage: null, language: "JavaScript", stargazers_count: 0, topics: [], fork: false },
+    { name: "simple-fashion", description: "A responsive fashion landing page focused on clean layout, stylish presentation, and modern visuals.", html_url: "https://github.com/Rnrezanur/simple-fashion", homepage: "https://rnrezanur.github.io/simple-fashion/", language: "HTML", stargazers_count: 0, topics: [], fork: false },
+    { name: "influencer-gear", description: "Responsive gear review and setup landing page for digital creators.", html_url: "https://github.com/Rnrezanur/influencer-gear", homepage: "https://rnrezanur.github.io/influencer-gear/", language: "CSS", stargazers_count: 0, topics: [], fork: false },
+    { name: "rock-paper-scissors", description: "Interactive Rock Paper Scissors game featuring score counter and animations.", html_url: "https://github.com/Rnrezanur/rock-paper-scissors", homepage: null, language: "Python", stargazers_count: 0, topics: [], fork: false },
+    { name: "typescript-problem-solving", description: "Algorithms, competitive programming, and data structure solutions in TypeScript.", html_url: "https://github.com/Rnrezanur/typescript-problem-solving", homepage: null, language: "TypeScript", stargazers_count: 0, topics: [], fork: false },
+    { name: "gaming-tournament", description: "Esports tournament bracket, schedules, and team roster interface.", html_url: "https://github.com/Rnrezanur/gaming-tournament", homepage: null, language: "HTML", stargazers_count: 0, topics: [], fork: false },
+    { name: "portfolio", description: "Personal developer portfolio website integrated with Firebase and dynamic CMS.", html_url: "https://github.com/Rnrezanur/portfolio", homepage: "https://rnrezanur.github.io/portfolio/", language: "JavaScript", stargazers_count: 0, topics: [], fork: false },
+    { name: "simple-java-p1", description: "JavaScript interactive utility experiments and logic exercises.", html_url: "https://github.com/Rnrezanur/simple-java-p1", homepage: null, language: "JavaScript", stargazers_count: 0, topics: [], fork: false },
+    { name: "Rnrezanur", description: "GitHub profile configuration repository.", html_url: "https://github.com/Rnrezanur/Rnrezanur", homepage: null, language: null, stargazers_count: 0, topics: [], fork: false },
   ];
 
   const defaultEducation = [
@@ -711,15 +741,81 @@
     openGithubModal();
   });
 
+  function updateGithubTokenUI() {
+    const savedToken = localStorage.getItem("portfolio_github_token") || "";
+    if (githubTokenInput) githubTokenInput.value = savedToken;
+    if (githubTokenBtnText) {
+      githubTokenBtnText.textContent = savedToken ? "Token Active" : "Token Settings";
+    }
+  }
+
+  toggleGithubTokenBtn?.addEventListener("click", () => {
+    githubTokenCard?.classList.toggle("hidden");
+    if (!githubTokenCard?.classList.contains("hidden")) {
+      githubTokenInput?.focus();
+    }
+  });
+
+  rateLimitAddTokenBtn?.addEventListener("click", () => {
+    githubTokenCard?.classList.remove("hidden");
+    githubTokenInput?.focus();
+  });
+
+  saveGithubTokenBtn?.addEventListener("click", () => {
+    const token = (githubTokenInput?.value || "").trim();
+    if (!token) {
+      alert("Please enter a GitHub personal access token.");
+      return;
+    }
+    localStorage.setItem("portfolio_github_token", token);
+    updateGithubTokenUI();
+    showToast("GitHub token saved! Rate limit increased to 5,000 req/hr.", "success");
+    githubTokenCard?.classList.add("hidden");
+    fetchGithubRepos(true);
+  });
+
+  clearGithubTokenBtn?.addEventListener("click", () => {
+    localStorage.removeItem("portfolio_github_token");
+    if (githubTokenInput) githubTokenInput.value = "";
+    updateGithubTokenUI();
+    showToast("GitHub token cleared.", "info");
+  });
+
   refreshGithubBtn?.addEventListener("click", () => fetchGithubRepos(true));
   importAllGithubBtn?.addEventListener("click", importAllGithubRepos);
   githubSearchInput?.addEventListener("input", renderGithubRepos);
 
+  // Expose fetchGithubRepos globally for retry buttons
+  window.fetchGithubRepos = fetchGithubRepos;
+
   async function fetchGithubRepos(force = false) {
     if (isFetchingGithub) return;
+
+    updateGithubTokenUI();
+    githubRateLimitBanner?.classList.add("hidden");
+
+    // 1. If we already have repos loaded in memory and not force-refreshing, just display
     if (githubRepos.length > 0 && !force) {
       renderGithubRepos();
       return;
+    }
+
+    // 2. Check LocalStorage cache (valid for 30 minutes unless force = true)
+    const cachedStr = localStorage.getItem("portfolio_cached_github_repos");
+    let cachedObj = null;
+    if (cachedStr) {
+      try {
+        cachedObj = JSON.parse(cachedStr);
+      } catch (e) {}
+    }
+
+    if (!force && cachedObj && Array.isArray(cachedObj.data) && cachedObj.data.length > 0) {
+      const isFresh = Date.now() - (cachedObj.time || 0) < 30 * 60 * 1000;
+      if (isFresh) {
+        githubRepos = cachedObj.data;
+        renderGithubRepos();
+        return;
+      }
     }
 
     isFetchingGithub = true;
@@ -732,24 +828,79 @@
     githubReposCount.textContent = "Fetching repositories...";
 
     try {
-      const response = await fetch("https://api.github.com/users/Rnrezanur/repos?sort=updated&per_page=100");
-      if (!response.ok) {
-        throw new Error(`GitHub API returned status ${response.status}`);
+      const token = (localStorage.getItem("portfolio_github_token") || "").trim();
+      const headers = {
+        Accept: "application/vnd.github.v3+json",
+      };
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
       }
+
+      const response = await fetch(
+        "https://api.github.com/users/Rnrezanur/repos?sort=updated&per_page=100",
+        { headers }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const err = new Error(errorData.message || `GitHub API returned status ${response.status}`);
+        err.status = response.status;
+        err.resetHeader = response.headers.get("x-ratelimit-reset");
+        throw err;
+      }
+
       const data = await response.json();
-      // Filter out forks or sort by pushed_at descending
       githubRepos = Array.isArray(data) ? data : [];
+
+      // Save to localStorage cache
+      try {
+        localStorage.setItem(
+          "portfolio_cached_github_repos",
+          JSON.stringify({ data: githubRepos, time: Date.now() })
+        );
+      } catch (e) {}
+
       renderGithubRepos();
     } catch (err) {
-      console.error("Error fetching GitHub repos:", err);
-      githubReposList.innerHTML = `
-        <div class="p-4 rounded-xl bg-red-950/40 border border-red-500/30 text-red-400 text-xs font-mono-code space-y-2">
-          <p class="font-bold"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Failed to load GitHub repositories</p>
-          <p class="text-[11px] opacity-80">${err.message}</p>
-          <button onclick="fetchGithubRepos(true)" class="accent-btn px-3 py-1 rounded text-[11px] mt-2">Retry</button>
-        </div>
-      `;
-      githubReposCount.textContent = "Error loading";
+      console.warn("GitHub repos fetch error:", err);
+
+      // FALLBACK: When GitHub API rate-limits unauthenticated requests (HTTP 403) or offline,
+      // seamlessly load cached repos or default snapshot so user is never blocked!
+      const fallbackList =
+        cachedObj && cachedObj.data && cachedObj.data.length > 0
+          ? cachedObj.data
+          : defaultGithubReposBackup;
+
+      if (fallbackList && fallbackList.length > 0) {
+        githubRepos = fallbackList;
+
+        if (githubRateLimitBanner && githubRateLimitText) {
+          let msg = "GitHub rate limit reached (60 req/hr). Showing cached repositories.";
+          if (err.resetHeader) {
+            const minutes = Math.max(
+              1,
+              Math.ceil((Number(err.resetHeader) * 1000 - Date.now()) / 60000)
+            );
+            msg = `GitHub rate limit reached (resets in ~${minutes} min). Showing cached repositories.`;
+          }
+          githubRateLimitText.textContent = msg;
+          githubRateLimitBanner.classList.remove("hidden");
+        }
+
+        renderGithubRepos();
+      } else {
+        githubReposList.innerHTML = `
+          <div class="p-4 rounded-xl bg-red-950/40 border border-red-500/30 text-red-400 text-xs font-mono-code space-y-3">
+            <p class="font-bold"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Failed to load GitHub repositories</p>
+            <p class="text-[11px] opacity-80">${err.message}</p>
+            <div class="flex items-center gap-2 pt-1">
+              <button onclick="window.fetchGithubRepos(true)" class="accent-btn px-3 py-1 rounded text-[11px]">Retry</button>
+              <button onclick="document.getElementById('githubTokenCard')?.classList.remove('hidden')" class="ghost-btn px-3 py-1 rounded text-[11px] text-[#2ce98a]">Enter GitHub Token</button>
+            </div>
+          </div>
+        `;
+        githubReposCount.textContent = "Error loading";
+      }
     } finally {
       isFetchingGithub = false;
     }

@@ -658,9 +658,37 @@
             <p class="text-xs font-mono-code text-[#9d9da5]">Repositories from <a href="https://github.com/Rnrezanur" target="_blank" class="text-[#2ce98a] hover:underline font-semibold">@Rnrezanur</a></p>
           </div>
         </div>
-        <button id="closeGithubModalBtn" class="text-[#9d9da5] hover:text-white text-lg">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
+        <div class="flex items-center gap-2">
+          <button type="button" id="toggleGithubTokenBtn" class="text-[11px] font-mono-code text-[#9d9da5] hover:text-[#2ce98a] flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-white/10 hover:border-[#2ce98a]/30 transition-all">
+            <i class="fa-solid fa-key text-[10px] text-[#2ce98a]"></i> <span id="githubTokenBtnText">Token Settings</span>
+          </button>
+          <button id="closeGithubModalBtn" class="text-[#9d9da5] hover:text-white text-lg ml-2">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Optional Token input bar (prevents 403 rate limits) -->
+      <div id="githubTokenCard" class="hidden panel-soft rounded-xl p-3 border border-[#2ce98a]/30 space-y-2 text-xs font-mono-code">
+        <div class="flex items-center justify-between">
+          <span class="text-white font-semibold flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-[#2ce98a]"></i> GitHub Personal Access Token (Optional)</span>
+          <a href="https://github.com/settings/tokens/new" target="_blank" class="text-[10px] text-[#2ce98a] hover:underline">Get Free Token (0 scopes) &nearr;</a>
+        </div>
+        <p class="text-[11px] text-[#9d9da5]">GitHub limits unauthenticated IPs to 60 requests/hr. With a free token (requires no permissions), you get 5,000 requests/hr.</p>
+        <div class="flex items-center gap-2">
+          <input type="password" id="githubTokenInput" placeholder="ghp_xxxxxxxxxxxx" class="input-field flex-1 px-3 py-1.5 text-xs rounded-lg" />
+          <button type="button" id="saveGithubTokenBtn" class="accent-btn px-3 py-1.5 rounded-lg text-xs">Save Token</button>
+          <button type="button" id="clearGithubTokenBtn" class="ghost-btn px-2.5 py-1.5 rounded-lg text-xs hover:text-red-400">Clear</button>
+        </div>
+      </div>
+
+      <!-- Rate Limit Alert Notice (Shown if rate limited or using cache) -->
+      <div id="githubRateLimitBanner" class="hidden p-3 rounded-xl bg-yellow-950/40 border border-yellow-500/30 text-yellow-300 text-xs font-mono-code flex items-start justify-between gap-2">
+        <div class="flex items-start gap-2">
+          <i class="fa-solid fa-triangle-exclamation text-sm shrink-0 mt-0.5 text-yellow-400"></i>
+          <span id="githubRateLimitText">GitHub API rate limit reached (60 req/hr). Showing cached repositories.</span>
+        </div>
+        <button type="button" id="rateLimitAddTokenBtn" class="accent-btn text-[10px] px-2.5 py-1 rounded shrink-0">Enter Token</button>
       </div>
 
       <!-- Search & Actions bar -->
